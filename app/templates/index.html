@@ -1,0 +1,277 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section py-5 mb-5 rounded-4 overflow-hidden">
+    <div class="container px-4 px-md-5">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <div class="badge bg-primary-light text-primary fw-bold px-3 py-2 rounded-pill mb-3">
+                    <i class="bi bi-shield-check me-2"></i>Secure Clinical Repository
+                </div>
+                <h1 class="display-4 fw-extrabold text-dark mb-3" style="line-height: 1.15; letter-spacing: -0.02em;">
+                    Your Health Records, <br>
+                    <span class="text-primary">Smarter & Secure</span>
+                </h1>
+                <p class="lead text-muted mb-4">
+                    HealthDoc ML is a modern patient-centered portal that lets you upload medical reports, automatically categorizes them using Machine Learning, and shares them securely using scan-to-view QR codes.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="{{ url_for('main.login') }}" class="btn btn-primary btn-lg px-4 shadow-sm">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Patient Log In
+                    </a>
+                    <a href="{{ url_for('main.register') }}" class="btn btn-outline-primary btn-lg px-4">
+                        <i class="bi bi-person-plus me-2"></i>Create Portal Account
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <!-- SVG Medical Illustration -->
+                <svg viewBox="0 0 500 400" width="100%" height="auto" class="img-fluid max-w-lg mx-auto" style="filter: drop-shadow(0 20px 30px rgba(15, 76, 129, 0.12));">
+                    <!-- Background Circle -->
+                    <circle cx="250" cy="200" r="180" fill="#f0f9ff" />
+                    <circle cx="250" cy="200" r="140" fill="#e0f2fe" />
+                    
+                    <!-- Floating Plus Marks (Medical) -->
+                    <g fill="#0ea5e9" opacity="0.3">
+                        <path d="M50 120 h20 v20 h-20 z M60 110 h-10 v30 h10 z" />
+                        <path d="M430 180 h15 v15 h-15 z M437 172 h-8 v25 h8 z" />
+                        <path d="M120 320 h12 v12 h-12 z M126 314 h-6 v20 h6 z" />
+                    </g>
+                    
+                    <!-- Laptop/Dashboard Base -->
+                    <rect x="100" y="260" width="300" height="20" rx="5" fill="#64748b" />
+                    <rect x="70" y="280" width="360" height="10" rx="3" fill="#475569" />
+                    
+                    <!-- Dashboard Screen -->
+                    <rect x="120" y="110" width="260" height="150" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="4" />
+                    <!-- Dashboard Header -->
+                    <rect x="120" y="110" width="260" height="30" rx="4" fill="#0f4c81" />
+                    <!-- Mini Profile Avatar on screen -->
+                    <circle cx="145" cy="125" r="8" fill="#ffffff" />
+                    <!-- Mini Text lines in header -->
+                    <rect x="160" y="122" width="60" height="6" rx="3" fill="#ffffff" opacity="0.8" />
+                    
+                    <!-- Mini Cards on screen -->
+                    <!-- Card 1 (Prescriptions - Teal) -->
+                    <rect x="135" y="155" width="105" height="40" rx="4" fill="#ccfbf1" stroke="#0d9488" stroke-width="1" />
+                    <rect x="145" y="165" width="50" height="5" rx="2.5" fill="#0d9488" />
+                    <rect x="145" y="175" width="70" height="4" rx="2" fill="#0d9488" opacity="0.6" />
+                    <circle cx="220" cy="175" r="7" fill="#0d9488" />
+                    
+                    <!-- Card 2 (Lab Reports - Blue) -->
+                    <rect x="260" y="155" width="105" height="40" rx="4" fill="#e0f2fe" stroke="#0ea5e9" stroke-width="1" />
+                    <rect x="270" y="165" width="65" height="5" rx="2.5" fill="#0ea5e9" />
+                    <rect x="270" y="175" width="45" height="4" rx="2" fill="#0ea5e9" opacity="0.6" />
+                    <circle cx="345" cy="175" r="7" fill="#0ea5e9" />
+                    
+                    <!-- Chart Graphic in Screen -->
+                    <rect x="135" y="210" width="230" height="40" rx="4" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1" />
+                    <path d="M145 235 l30 -15 l40 10 l50 -20 l40 15 l20 -5" fill="none" stroke="#0ea5e9" stroke-width="3" stroke-linecap="round" />
+                    <circle cx="345" cy="220" r="4" fill="#0ea5e9" />
+                    
+                    <!-- Shield Icon overlapping -->
+                    <g transform="translate(320, 210) scale(1.3)">
+                        <circle cx="20" cy="20" r="24" fill="#ffffff" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.15))" />
+                        <path d="M20 8 L10 13 V23 C10 29.2 14.3 35 20 36.5 C25.7 35 30 29.2 30 23 V13 L20 8 Z" fill="#0d9488" />
+                        <!-- White plus inside shield -->
+                        <path d="M20 14 v12 M14 20 h12" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" />
+                    </g>
+                </g>
+                </svg>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Feature Highlights Section -->
+<section class="container mb-5">
+    <div class="text-center mb-5">
+        <span class="text-success fw-bold text-uppercase tracking-wider">Features Grid</span>
+        <h2 class="fw-bold text-dark mt-1">Smart Healthcare Management</h2>
+        <p class="text-muted mx-auto" style="max-width: 600px;">
+            A modern set of tools built specifically to streamline patient documents and enable secure sharing.
+        </p>
+    </div>
+    <div class="row g-4">
+        <!-- Feature 1 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card card-custom card-hover h-100 p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-primary-light text-primary rounded p-3 me-3">
+                        <i class="bi bi-hdd-network fs-4"></i>
+                    </div>
+                    <h5 class="fw-bold mb-0">Secure Storage</h5>
+                </div>
+                <p class="text-muted mb-0 small">
+                    Encrypts and stores patient files in SQLite. Ensures patient-only authorization filters prevent unintended direct link discovery.
+                </p>
+            </div>
+        </div>
+        <!-- Feature 2 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card card-custom card-hover h-100 p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-primary-light text-primary rounded p-3 me-3">
+                        <i class="bi bi-cpu fs-4"></i>
+                    </div>
+                    <h5 class="fw-bold mb-0">AI Classification</h5>
+                </div>
+                <p class="text-muted mb-0 small">
+                    Uses Logistic Regression machine learning to parse PDF text and categorize documents automatically with zero human entry.
+                </p>
+            </div>
+        </div>
+        <!-- Feature 3 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card card-custom card-hover h-100 p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-primary-light text-primary rounded p-3 me-3">
+                        <i class="bi bi-qr-code-scan fs-4"></i>
+                    </div>
+                    <h5 class="fw-bold mb-0">QR Code Sharing</h5>
+                </div>
+                <p class="text-muted mb-0 small">
+                    Instantly generates unique QR codes pointing directly to document details. Allows quick, password-secured scanning at clinics.
+                </p>
+            </div>
+        </div>
+        <!-- Feature 4 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card card-custom card-hover h-100 p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-primary-light text-primary rounded p-3 me-3">
+                        <i class="bi bi-clock-history fs-4"></i>
+                    </div>
+                    <h5 class="fw-bold mb-0">Access History</h5>
+                </div>
+                <p class="text-muted mb-0 small">
+                    Logs and audits login, upload, view, download, and deletion activities to maintain complete transparency.
+                </p>
+            </div>
+        </div>
+        <!-- Feature 5 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card card-custom card-hover h-100 p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-primary-light text-primary rounded p-3 me-3">
+                        <i class="bi bi-cloud-check fs-4"></i>
+                    </div>
+                    <h5 class="fw-bold mb-0">Cloud-Based Access</h5>
+                </div>
+                <p class="text-muted mb-0 small">
+                    Responsive design ensures patients and clinical doctors can securely view health portfolios on desktop, tablet, or mobile.
+                </p>
+            </div>
+        </div>
+        <!-- Feature 6 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card card-custom card-hover h-100 p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-primary-light text-primary rounded p-3 me-3">
+                        <i class="bi bi-search fs-4"></i>
+                    </div>
+                    <h5 class="fw-bold mb-0">Fast Report Retrieval</h5>
+                </div>
+                <p class="text-muted mb-0 small">
+                    Search and filter records by keyword filename, file categories, or upload dates instantly on the patient dashboard.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Statistics Section -->
+<section class="bg-white border-top border-bottom py-5 mb-5">
+    <div class="container">
+        <div class="row g-4 text-center">
+            <!-- Counter 1 -->
+            <div class="col-6 col-lg-3">
+                <div class="landing-stat-card border-0 shadow-none">
+                    <div class="landing-stat-number" id="stat-reports" data-target="{{ 120 + total_reports }}">0</div>
+                    <div class="text-muted fw-semibold small text-uppercase">Reports Stored</div>
+                </div>
+            </div>
+            <!-- Counter 2 -->
+            <div class="col-6 col-lg-3">
+                <div class="landing-stat-card border-0 shadow-none">
+                    <div class="landing-stat-number" id="stat-users" data-target="{{ 45 + total_users }}">0</div>
+                    <div class="text-muted fw-semibold small text-uppercase">Total Users</div>
+                </div>
+            </div>
+            <!-- Counter 3 -->
+            <div class="col-6 col-lg-3">
+                <div class="landing-stat-card border-0 shadow-none">
+                    <div class="landing-stat-number" id="stat-accuracy" data-target="96">0</div>
+                    <div class="text-muted fw-semibold small text-uppercase">Classification Acc. (%)</div>
+                </div>
+            </div>
+            <!-- Counter 4 -->
+            <div class="col-6 col-lg-3">
+                <div class="landing-stat-card border-0 shadow-none">
+                    <div class="landing-stat-number" id="stat-processed" data-target="{{ 512 + total_reports * 3 }}">0</div>
+                    <div class="text-muted fw-semibold small text-uppercase">Documents Processed</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Benefits Section -->
+<section class="container mb-5 pb-4">
+    <div class="text-center mb-5">
+        <span class="text-primary fw-bold text-uppercase tracking-wider">Key Benefits</span>
+        <h2 class="fw-bold text-dark mt-1">Designed for Patients & Healthcare Providers</h2>
+    </div>
+    <div class="row g-4">
+        <!-- Benefit 1 -->
+        <div class="col-md-6 col-lg-3">
+            <div class="benefit-card">
+                <div class="benefit-icon-box">
+                    <i class="bi bi-layout-text-window-reverse"></i>
+                </div>
+                <h5 class="fw-bold mb-3">Easy Management</h5>
+                <p class="text-muted small mb-0">
+                    A clean dashboard helps you drag, drop, and view reports instantly, eliminating clutter and paper files.
+                </p>
+            </div>
+        </div>
+        <!-- Benefit 2 -->
+        <div class="col-md-6 col-lg-3">
+            <div class="benefit-card">
+                <div class="benefit-icon-box">
+                    <i class="bi bi-share"></i>
+                </div>
+                <h5 class="fw-bold mb-3">Secure Sharing</h5>
+                <p class="text-muted small mb-0">
+                    Share reports at the clinic using secure, dynamic QR codes, allowing doctors to view your specific reports directly.
+                </p>
+            </div>
+        </div>
+        <!-- Benefit 3 -->
+        <div class="col-md-6 col-lg-3">
+            <div class="benefit-card">
+                <div class="benefit-icon-box">
+                    <i class="bi bi-journal-medical"></i>
+                </div>
+                <h5 class="fw-bold mb-3">Organized Records</h5>
+                <p class="text-muted small mb-0">
+                    No more searching through folders. Categorize labs, prescriptions, scan reports, and discharge notes in one place.
+                </p>
+            </div>
+        </div>
+        <!-- Benefit 4 -->
+        <div class="col-md-6 col-lg-3">
+            <div class="benefit-card">
+                <div class="benefit-icon-box">
+                    <i class="bi bi-magic"></i>
+                </div>
+                <h5 class="fw-bold mb-3">AI-Assisted Categorization</h5>
+                <p class="text-muted small mb-0">
+                    State-of-the-art NLP models read the text in your PDF, automatically predicting the file type instantly.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
