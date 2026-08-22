@@ -1,0 +1,45 @@
+text,category
+"Rx Amoxicillin 500mg tablets. Take 1 tablet three times daily for 7 days. Dispense: 21 tablets. Sig: 1 tab tid.",Prescription
+"Patient requires Paracetamol 650mg as needed for pain and fever. Maximum 4 grams daily. Refills: 0.",Prescription
+"Dispense Lipitor Atorvastatin 20 mg once daily at bedtime. Qty: 30 days. No refills.",Prescription
+"Prescription for Metformin 1000mg BID with meals for type 2 diabetes mellitus control.",Prescription
+"Albuterol inhaler 90mcg. Inhale 2 puffs every 4 to 6 hours as needed for shortness of breath or wheezing.",Prescription
+"Lisinopril 10mg PO QD. Dispense: 30 tablets. Take one tablet daily for blood pressure control.",Prescription
+"Rx Ibuprofen 400mg PO every 6 hours as needed for joint pain. Qty: 60.",Prescription
+"Please take Omeprazole 20mg daily before breakfast. Refills: 3.",Prescription
+"Prescribed Gabapentin 300mg capsule. Take one capsule at bedtime for neuropathy.",Prescription
+"Prednisone 5mg taper: Take 3 tablets daily for 3 days, then 2 tablets daily for 3 days, then 1 tablet daily for 3 days.",Prescription
+"Rx: Cetirizine 10mg daily for seasonal allergy relief. Qty: 30. OTC.",Prescription
+"Dispense Levothyroxine 75mcg daily. Take on an empty stomach in the morning.",Prescription
+"Patient given prescription for Augmentin 875/125mg twice daily for 10 days for acute sinusitis.",Prescription
+"Complete Blood Count CBC results. Hemoglobin: 14.2 g/dL (normal range: 13.5-17.5). White Blood Cells WBC: 6.5 x10^3/uL.",Lab Report
+"Lipid Panel test. Total Cholesterol: 210 mg/dL (Borderline High). HDL Cholesterol: 45 mg/dL. LDL Cholesterol: 130 mg/dL. Triglycerides: 175 mg/dL.",Lab Report
+"Urinalysis Report. Color: Yellow. Clarity: Clear. Protein: Negative. Glucose: Negative. Microscopic: 0-2 RBC per HPF.",Lab Report
+"Basic Metabolic Panel BMP. Serum Sodium: 140 mEq/L. Potassium: 4.1 mEq/L. Chloride: 102 mEq/L. Blood Urea Nitrogen BUN: 15 mg/dL. Creatinine: 0.9 mg/dL.",Lab Report
+"Thyroid Stimulating Hormone TSH assay. Result: 2.4 uIU/mL. Reference Interval: 0.45 - 4.50 uIU/mL. Euthyroid.",Lab Report
+"Liver Function Tests LFT. ALT: 28 U/L. AST: 24 U/L. Alkaline Phosphatase: 65 U/L. Total Bilirubin: 0.7 mg/dL. Albumin: 4.2 g/dL.",Lab Report
+"Glycated Hemoglobin HbA1c blood test result: 5.8% (Prediabetes range: 5.7% to 6.4%). Fasting plasma glucose: 105 mg/dL.",Lab Report
+"Serum Electrolytes test. Sodium 138, Potassium 3.9, Bicarbonate 24, Calcium 9.5 mg/dL. All parameters within normal reference ranges.",Lab Report
+"Kidney Function Profile. Glomerular Filtration Rate eGFR: 88 mL/min/1.73m2. Serum Creatinine: 1.1 mg/dL. Blood Urea Nitrogen: 18 mg/dL.",Lab Report
+"Coagulation Profile. Prothrombin Time PT: 12.5 seconds. INR: 1.1. Activated Partial Thromboplastin Time aPTT: 30 seconds.",Lab Report
+"Vitamin D 25-Hydroxy test. Serum concentration: 24 ng/mL. Status: Mild Vitamin D insufficiency.",Lab Report
+"X-Ray Chest PA View. Lung fields are clear. No focal consolidation, pleural effusion, or pneumothorax is identified. Cardiomediastinal silhouette is normal.",Scan Report
+"CT scan of the abdomen and pelvis with intravenous contrast. The liver, spleen, pancreas, gallbladder, and kidneys are normal in size and appearance. No retroperitoneal lymphadenopathy.",Scan Report
+"MRI Brain without contrast. Findings: Normal ventricular system. No acute infarct, hemorrhage, or mass effect. Mild chronic microvascular ischemic changes.",Scan Report
+"Ultrasound Abdomen. Gallbladder is normal with no gallstones, sludge, or wall thickening. Common bile duct is not dilated. Kidneys show normal parenchymal thickness.",Scan Report
+"CT Brain without contrast. No intracranial hemorrhage, midline shift, or mass effect. Ventricles are normal for age. Prominent sulci suggesting mild cerebral atrophy.",Scan Report
+"Chest X-Ray. Mild cardiomegaly noted. Prominent bronchovascular markings in the lung bases. No acute consolidation or pleural effusion is seen.",Scan Report
+"Lumbar Spine X-Ray. Five lumbar type vertebrae present. Mild degenerative disc disease and osteophyte formation at L4-L5 and L5-S1. Alignment is normal.",Scan Report
+"Ultrasound Pelvis. Uterus is normal size and echotexture. Both ovaries are visualized and normal. No free fluid in the cul-de-sac.",Scan Report
+"MRI Knee Left. Findings: Intact anterior cruciate ligament ACL and posterior cruciate ligament PCL. Grade 2 tear of the posterior horn of the medial meniscus.",Scan Report
+"CT Chest with contrast. Multiple subcentimeter pulmonary nodules noted, unchanged from previous scan. No pleural effusion or hilar adenopathy.",Scan Report
+"Discharge Summary. Admission Date: 2026-05-10. Discharge Date: 2026-05-15. Diagnoses: Acute appendicitis, status post laparoscopic appendectomy. Condition at discharge: Stable.",Discharge Summary
+"Patient was admitted with chest pain. Cardiac enzymes troponin were negative. ECG showed no ST elevations. Discharged home with outpatient cardiology follow up.",Discharge Summary
+"Discharge summary note. Hospital course: Patient was treated with IV antibiotics for severe cellulitis of the left lower extremity. Swelling improved significantly.",Discharge Summary
+"Discharge Instructions: Resume home medications. Follow up with primary care physician in 7-10 days. Avoid heavy lifting for 2 weeks. Dial 911 for severe symptoms.",Discharge Summary
+"Final Discharge Summary. Patient admitted for elective total knee arthroplasty. Surgery went without complications. Patient tolerated physical therapy well and is discharged home.",Discharge Summary
+"Discharge Diagnosis: Pneumonia, bacterial. Secondary Diagnosis: Type 2 Diabetes. Hospital Course: Treated with intravenous Ceftriaxone, transitioned to oral Levofloxacin.",Discharge Summary
+"Discharge summary. Summary of care: 68-year-old male admitted for hypertensive emergency. Blood pressure controlled with intravenous Labetalol, transitioned to oral Lisinopril.",Discharge Summary
+"Patient discharged following successful management of acute pancreatitis. Recommended low-fat diet. Medication adjustments: discontinue NSAIDs.",Discharge Summary
+"Final Summary. Reason for admission: Exacerbation of Chronic Obstructive Pulmonary Disease COPD. Treatment: Nebulized bronchodilators, systemic steroids, oxygen therapy.",Discharge Summary
+"Discharge summary: Patient underwent elective laparoscopic cholecystectomy. Recovered well postoperatively. Tolerating regular diet. Discharged in stable condition.",Discharge Summary

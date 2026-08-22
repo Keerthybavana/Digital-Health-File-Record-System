@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('main.dashboard') }}" class="text-decoration-none fw-semibold"><i class="bi bi-arrow-left me-1"></i>Back to Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Document Record</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Left Column: Document Info & QR Code -->
+    <div class="col-md-5">
+        <div class="card card-custom mb-4">
+            <div class="card-header bg-white border-bottom py-3">
+                <h5 class="fw-bold mb-0 text-dark d-flex align-items-center">
+                    <i class="bi bi-info-circle-fill me-2 text-primary"></i>Document Info
+                </h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush mb-4">
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-3 bg-transparent">
+                        <span class="text-muted"><i class="bi bi-file-earmark-pdf me-2 text-danger"></i>File Name</span>
+                        <strong class="text-dark text-break text-end ms-2" style="max-width: 65%;">{{ document.original_filename }}</strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-3 bg-transparent">
+                        <span class="text-muted"><i class="bi bi-tags me-2 text-primary"></i>Predicted Category</span>
+                        {% if document.category == 'Prescription' %}
+                            <span class="badge badge-prescription px-3 py-2"><i class="bi bi-capsule me-1"></i>Prescription</span>
+                        {% elif document.category == 'Lab Report' %}
+                            <span class="badge badge-lab px-3 py-2"><i class="bi bi-file-earmark-medical me-1"></i>Lab Report</span>
+                        {% elif document.category == 'Scan Report' %}
+                            <span class="badge badge-scan px-3 py-2"><i class="bi bi-activity me-1"></i>Scan Report</span>
+                        {% else %}
+                            <span class="badge badge-discharge px-3 py-2"><i class="bi bi-clipboard2-pulse me-1"></i>Discharge Summary</span>
+                        {% endif %}
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-3 bg-transparent">
+                        <span class="text-muted"><i class="bi bi-calendar-check me-2 text-primary"></i>Upload Date</span>
+                        <strong class="text-dark">{{ document.upload_date.strftime('%B %d, %Y - %H:%M') }}</strong>
+                    </li>
+                </ul>
+
+                <!-- QR Code Box -->
+                <div class="text-center bg-light p-4 rounded-3 border mb-4">
+                    <h6 class="fw-bold text-dark mb-2 d-flex align-items-center justify-content-center">
+                        <i class="bi bi-qr-code-scan me-2 text-primary"></i>Document QR Code
+                    </h6>
+                    <p class="text-muted small mb-3">Scan this code with a mobile device to access this record page directly.</p>
+                    <div class="qr-box mb-3">
+                        <img src="{{ url_for('static', filename=document.qr_path) }}" alt="QR Code" class="img-fluid" style="max-width: 170px;">
+                    </div>
+                    <div class="bg-white border rounded p-2 text-truncate">
+                        <code class="text-dark small select-all" id="detail-qr-url">{{ url_for('main.share', doc_id=document.id, _external=True) }}</code>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="row g-2">
+                    <div class="col-6">
+                        <a href="{{ url_for('main.download', doc_id=document.id) }}" class="btn btn-success text-white w-100 py-2.5 fw-semibold d-flex align-items-center justify-content-center">
+                            <i class="bi bi-download me-2"></i> Download PDF
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <form action="{{ url_for('main.delete', doc_id=document.id) }}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this document? This action cannot be undone.');">
+                            <button type="submit" class="btn btn-outline-danger w-100 py-2.5 fw-semibold d-flex align-items-center justify-content-center">
+                                <i class="bi bi-trash me-2"></i> Delete File
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: ML Process Analysis & Extracted text -->
+    <div class="col-md-7">
+        <div class="card card-custom h-100">
+            <div class="card-header bg-white border-bottom py-3">
+                <h5 class="fw-bold mb-0 text-dark d-flex align-items-center">
+                    <i class="bi bi-cpu-fill me-2 text-primary"></i>NLP Classification Pipeline
+                </h5>
+            </div>
+            <div class="card-body">
+                <h6 class="fw-bold text-dark mb-2">Automated Categorization Process:</h6>
+                <ol class="text-muted small ps-3 mb-4">
+                    <li class="mb-1"><strong>Text Extraction</strong>: We extract textual symbols from the uploaded PDF document structure.</li>
+                    <li class="mb-1"><strong>Vector Representation</strong>: Text is converted to a weighted numerical representation using TF-IDF (Term Frequency-Inverse Document Frequency) calculations.</li>
+                    <li class="mb-1"><strong>Logistic Regression Classifier</strong>: A machine learning model calculates classification probabilities, assigning the highest probability class as the file type.</li>
+                </ol>
+
+                <h6 class="fw-bold text-dark d-flex align-items-center mb-2">
+                    <i class="bi bi-file-earmark-text-fill me-2 text-secondary"></i>Parsed Text Snippet (First 800 Characters)
+                </h6>
+                {% if text_snippet %}
+                    <pre class="text-snippet-box text-break mb-0">{{ text_snippet }}</pre>
+                {% else %}
+                    <div class="alert alert-info py-2 mb-0" style="font-size: 0.9rem;">
+                        <i class="bi bi-info-circle me-1"></i> No textual information was extracted from this PDF. (Scanned images or binary files might return empty text content).
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
