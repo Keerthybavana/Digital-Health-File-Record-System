@@ -1,276 +1,624 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<!-- Hero Section -->
-<section class="hero-section py-5 mb-5 rounded-4 overflow-hidden">
-    <div class="container px-4 px-md-5">
+<!-- ==========================================================================
+     ATLASSIAN CONFLUENCE HERO SECTION
+     ========================================================================== -->
+<section class="confluence-hero">
+    <div class="container position-relative">
         <div class="row align-items-center g-5">
+            <!-- Left Hero Text -->
             <div class="col-lg-6">
-                <div class="badge bg-primary-light text-primary fw-bold px-3 py-2 rounded-pill mb-3">
-                    <i class="bi bi-shield-check me-2"></i>Secure Clinical Repository
+                <div class="atl-pill-badge indigo mb-3">
+                    <i class="bi bi-stars"></i> The AI Workspace for Clinical Knowledge
                 </div>
-                <h1 class="display-4 fw-extrabold text-dark mb-3" style="line-height: 1.15; letter-spacing: -0.02em;">
-                    Your Health Records, <br>
-                    <span class="text-primary">Smarter & Secure</span>
+                
+                <h1 class="hero-headline">
+                    The intelligent health workspace that <span class="gradient-text">works with you.</span>
                 </h1>
-                <p class="lead text-muted mb-4">
-                    HealthDoc ML is a modern patient-centered portal that lets you upload medical reports, automatically categorizes them using Machine Learning, and shares them securely using scan-to-view QR codes.
+                
+                <p class="hero-subtitle">
+                    Centralize your clinical files, classify documents automatically with Machine Learning, and share instant records with doctors using touchless dynamic QR codes.
                 </p>
-                <div class="d-flex flex-wrap gap-3">
-                    <a href="{{ url_for('main.login') }}" class="btn btn-primary btn-lg px-4 shadow-sm">
-                        <i class="bi bi-box-arrow-in-right me-2"></i>Patient Log In
+
+                <div class="d-flex flex-wrap gap-3 mb-4">
+                    <a href="{{ url_for('main.register') }}" class="btn btn-atl-primary px-4 py-2.5 fs-6 shadow-sm">
+                        Get Started Free <i class="bi bi-arrow-right"></i>
                     </a>
-                    <a href="{{ url_for('main.register') }}" class="btn btn-outline-primary btn-lg px-4">
-                        <i class="bi bi-person-plus me-2"></i>Create Portal Account
+                    <a href="#playground" class="btn btn-atl-outline px-4 py-2.5 fs-6">
+                        <i class="bi bi-play-circle-fill text-primary"></i> Try AI Interactive Demo
                     </a>
+                </div>
+
+                <!-- Trust Bar -->
+                <div class="hero-trust-bar">
+                    <div class="trust-item">
+                        <i class="bi bi-shield-check"></i>
+                        <span>HIPAA-Aligned Architecture</span>
+                    </div>
+                    <div class="trust-item">
+                        <i class="bi bi-cpu"></i>
+                        <span>Scikit-Learn NLP Engine</span>
+                    </div>
+                    <div class="trust-item">
+                        <i class="bi bi-qr-code-scan"></i>
+                        <span>Instant QR Mobile Sync</span>
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-6 text-center">
-                <!-- SVG Medical Illustration -->
-                <svg viewBox="0 0 500 400" width="100%" height="auto" class="img-fluid max-w-lg mx-auto" style="filter: drop-shadow(0 20px 30px rgba(15, 76, 129, 0.12));">
-                    <!-- Background Circle -->
-                    <circle cx="250" cy="200" r="180" fill="#f0f9ff" />
-                    <circle cx="250" cy="200" r="140" fill="#e0f2fe" />
+
+            <!-- Right Hero 3D Showcase Window -->
+            <div class="col-lg-6">
+                <div class="hero-showcase-window">
+                    <div class="window-header">
+                        <div class="window-dots">
+                            <span class="window-dot red"></span>
+                            <span class="window-dot yellow"></span>
+                            <span class="window-dot green"></span>
+                        </div>
+                        <div class="window-search">
+                            <i class="bi bi-search text-muted"></i>
+                            <span>Search health records or scans...</span>
+                        </div>
+                    </div>
                     
-                    <!-- Floating Plus Marks (Medical) -->
-                    <g fill="#0ea5e9" opacity="0.3">
-                        <path d="M50 120 h20 v20 h-20 z M60 110 h-10 v30 h10 z" />
-                        <path d="M430 180 h15 v15 h-15 z M437 172 h-8 v25 h8 z" />
-                        <path d="M120 320 h12 v12 h-12 z M126 314 h-6 v20 h6 z" />
-                    </g>
-                    
-                    <!-- Laptop/Dashboard Base -->
-                    <rect x="100" y="260" width="300" height="20" rx="5" fill="#64748b" />
-                    <rect x="70" y="280" width="360" height="10" rx="3" fill="#475569" />
-                    
-                    <!-- Dashboard Screen -->
-                    <rect x="120" y="110" width="260" height="150" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="4" />
-                    <!-- Dashboard Header -->
-                    <rect x="120" y="110" width="260" height="30" rx="4" fill="#0f4c81" />
-                    <!-- Mini Profile Avatar on screen -->
-                    <circle cx="145" cy="125" r="8" fill="#ffffff" />
-                    <!-- Mini Text lines in header -->
-                    <rect x="160" y="122" width="60" height="6" rx="3" fill="#ffffff" opacity="0.8" />
-                    
-                    <!-- Mini Cards on screen -->
-                    <!-- Card 1 (Prescriptions - Teal) -->
-                    <rect x="135" y="155" width="105" height="40" rx="4" fill="#ccfbf1" stroke="#0d9488" stroke-width="1" />
-                    <rect x="145" y="165" width="50" height="5" rx="2.5" fill="#0d9488" />
-                    <rect x="145" y="175" width="70" height="4" rx="2" fill="#0d9488" opacity="0.6" />
-                    <circle cx="220" cy="175" r="7" fill="#0d9488" />
-                    
-                    <!-- Card 2 (Lab Reports - Blue) -->
-                    <rect x="260" y="155" width="105" height="40" rx="4" fill="#e0f2fe" stroke="#0ea5e9" stroke-width="1" />
-                    <rect x="270" y="165" width="65" height="5" rx="2.5" fill="#0ea5e9" />
-                    <rect x="270" y="175" width="45" height="4" rx="2" fill="#0ea5e9" opacity="0.6" />
-                    <circle cx="345" cy="175" r="7" fill="#0ea5e9" />
-                    
-                    <!-- Chart Graphic in Screen -->
-                    <rect x="135" y="210" width="230" height="40" rx="4" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1" />
-                    <path d="M145 235 l30 -15 l40 10 l50 -20 l40 15 l20 -5" fill="none" stroke="#0ea5e9" stroke-width="3" stroke-linecap="round" />
-                    <circle cx="345" cy="220" r="4" fill="#0ea5e9" />
-                    
-                    <!-- Shield Icon overlapping -->
-                    <g transform="translate(320, 210) scale(1.3)">
-                        <circle cx="20" cy="20" r="24" fill="#ffffff" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.15))" />
-                        <path d="M20 8 L10 13 V23 C10 29.2 14.3 35 20 36.5 C25.7 35 30 29.2 30 23 V13 L20 8 Z" fill="#0d9488" />
-                        <!-- White plus inside shield -->
-                        <path d="M20 14 v12 M14 20 h12" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" />
-                    </g>
-                </g>
-                </svg>
+                    <div class="hero-image-wrapper">
+                        <img src="{{ url_for('static', filename='images/confluence_hero_showcase.jpg') }}" alt="HealthDoc ML Workspace Interface" class="img-fluid">
+                        
+                        <!-- Floating Pill Badges -->
+                        <div class="floating-hero-pill top-right">
+                            <div class="d-flex align-items-center justify-content-center bg-primary text-white rounded-circle" style="width: 28px; height: 28px;">
+                                <i class="bi bi-cpu-fill small"></i>
+                            </div>
+                            <div>
+                                <span class="fw-bold text-dark d-block">AI Classification Active</span>
+                                <span class="text-success small fw-semibold">99.2% Accuracy Match</span>
+                            </div>
+                        </div>
+
+                        <div class="floating-hero-pill bottom-left">
+                            <div class="d-flex align-items-center justify-content-center bg-success text-white rounded-circle" style="width: 28px; height: 28px;">
+                                <i class="bi bi-qr-code small"></i>
+                            </div>
+                            <div>
+                                <span class="fw-bold text-dark d-block">Touchless QR Sharing</span>
+                                <span class="text-muted small">Doctor Scan Verified</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Feature Highlights Section -->
-<section class="container mb-5">
+<!-- ==========================================================================
+     CONFLUENCE TAB SHOWCASE SECTION
+     "Work isn't one-size-fits-all. Neither is HealthDoc ML."
+     ========================================================================== -->
+<section class="confluence-tabs-section" id="showcase">
+    <div class="container">
+        <!-- Section Header -->
+        <div class="text-center mb-5">
+            <span class="text-primary fw-bold text-uppercase tracking-wider small d-block mb-1">
+                POWERING EVERY STAGE OF CLINICAL CARE
+            </span>
+            <h2 class="display-5 fw-extrabold text-dark mb-2">
+                Work isn't one-size-fits-all. Neither is HealthDoc ML.
+            </h2>
+            <p class="text-muted mx-auto" style="max-width: 680px; font-size: 1.1rem;">
+                Whether managing daily medication prescriptions, diagnostic lab panels, or urgent surgical summaries, customize how you ingest, classify, and share health documents.
+            </p>
+        </div>
+
+        <!-- Horizontal Confluence Tab Bar -->
+        <div class="tabs-nav-scroller">
+            <div class="confluence-tab-pills justify-content-start justify-content-lg-center">
+                <button class="confluence-tab-pill active" data-tab="records">
+                    <i class="bi bi-file-earmark-richtext"></i> Smart Records
+                </button>
+                <button class="confluence-tab-pill" data-tab="classifier">
+                    <i class="bi bi-cpu-fill text-primary"></i> AI Classification
+                </button>
+                <button class="confluence-tab-pill" data-tab="qrvault">
+                    <i class="bi bi-qr-code-scan text-success"></i> Dynamic QR Vault
+                </button>
+                <button class="confluence-tab-pill" data-tab="timeline">
+                    <i class="bi bi-clock-history text-indigo"></i> Audit Timeline
+                </button>
+                <button class="confluence-tab-pill" data-tab="collab">
+                    <i class="bi bi-people-fill text-amber"></i> Clinic Collaboration
+                </button>
+            </div>
+        </div>
+
+        <!-- Tab 1 Panel: Smart Records -->
+        <div class="confluence-tab-panel active" id="panel-records">
+            <div class="row g-4 align-items-center">
+                <div class="col-lg-5">
+                    <div class="tab-feature-card">
+                        <span class="atl-pill-badge primary mb-3">CENTRALIZED FILE CABINET</span>
+                        <h3 class="fw-bold text-dark mb-3">Put pen to paper. No hassle.</h3>
+                        <p class="text-muted mb-0">
+                            Say goodbye to cluttered binders and lost paper reports. HealthDoc ML organizes all your medical history in a unified, secure cloud vault accessible from any device.
+                        </p>
+                        
+                        <ul class="tab-checklist">
+                            <li><i class="bi bi-check2-circle"></i> <span>Drag-and-drop PDF ingestion with UUID collision prevention</span></li>
+                            <li><i class="bi bi-check2-circle"></i> <span>Real-time keyword search across filenames and report titles</span></li>
+                            <li><i class="bi bi-check2-circle"></i> <span>Automatic text extraction via PyPDF2 parsing algorithms</span></li>
+                        </ul>
+
+                        <div>
+                            <a href="{{ url_for('main.register') }}" class="btn btn-atl-primary">
+                                Try Smart Records Free &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="tab-preview-board p-4 bg-white">
+                        <div class="d-flex align-items-center justify-content-between mb-3 pb-3 border-bottom">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge-cat badge-cat-prescription"><i class="bi bi-capsule"></i> Prescription</span>
+                                <span class="badge-cat badge-cat-lab"><i class="bi bi-file-earmark-medical"></i> Lab Report</span>
+                                <span class="badge-cat badge-cat-scan"><i class="bi bi-activity"></i> Scan Report</span>
+                                <span class="badge-cat badge-cat-discharge"><i class="bi bi-clipboard2-pulse"></i> Discharge</span>
+                            </div>
+                            <span class="badge bg-light text-muted border">Live Sync Active</span>
+                        </div>
+                        <img src="{{ url_for('static', filename='images/confluence_hero_showcase.jpg') }}" alt="Smart Records Preview" class="rounded-3 shadow-sm">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 2 Panel: AI Classifier -->
+        <div class="confluence-tab-panel" id="panel-classifier">
+            <div class="row g-4 align-items-center">
+                <div class="col-lg-5">
+                    <div class="tab-feature-card">
+                        <span class="atl-pill-badge indigo mb-3">SCIKIT-LEARN NLP INTELLIGENCE</span>
+                        <h3 class="fw-bold text-dark mb-3">Transform clinical text into structured categories.</h3>
+                        <p class="text-muted mb-0">
+                            Powered by Term Frequency-Inverse Document Frequency (TF-IDF) feature weighting and trained Logistic Regression classifiers, your PDFs are labeled automatically with zero manual entry.
+                        </p>
+
+                        <ul class="tab-checklist">
+                            <li><i class="bi bi-check2-circle"></i> <span>Identifies clinical pharmacology, dosages, and refill rules</span></li>
+                            <li><i class="bi bi-check2-circle"></i> <span>Detects biochemical biomarkers (CBC, Lipid, Fasting Glucose)</span></li>
+                            <li><i class="bi bi-check2-circle"></i> <span>Parses radiology nomenclature (CT scans, X-Rays, MRIs)</span></li>
+                        </ul>
+
+                        <div>
+                            <a href="#playground" class="btn btn-atl-indigo">
+                                Test the AI Classifier Below &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="tab-preview-board p-2 bg-white">
+                        <img src="{{ url_for('static', filename='images/ai_classifier_pipeline.jpg') }}" alt="AI Classification Pipeline Diagram" class="rounded-3">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 3 Panel: Dynamic QR Vault -->
+        <div class="confluence-tab-panel" id="panel-qrvault">
+            <div class="row g-4 align-items-center">
+                <div class="col-lg-5">
+                    <div class="tab-feature-card">
+                        <span class="atl-pill-badge teal mb-3">TOUCHLESS MOBILE PROTOCOL</span>
+                        <h3 class="fw-bold text-dark mb-3">Scan to view. No app install required.</h3>
+                        <p class="text-muted mb-0">
+                            Visiting a clinic or hospital? Present your report's dynamic QR code. Doctors scan with their standard phone camera and instantly access the verified document securely.
+                        </p>
+
+                        <ul class="tab-checklist">
+                            <li><i class="bi bi-check2-circle"></i> <span>Dynamic endpoint binding automatically updates to network IP</span></li>
+                            <li><i class="bi bi-check2-circle"></i> <span>Direct PDF inspection without sharing account credentials</span></li>
+                            <li><i class="bi bi-check2-circle"></i> <span>One-click clipboard copy of public share links</span></li>
+                        </ul>
+
+                        <div>
+                            <a href="{{ url_for('main.register') }}" class="btn btn-atl-success">
+                                Generate Your First QR Code &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="tab-preview-board p-2 bg-white">
+                        <img src="{{ url_for('static', filename='images/qr_mobile_scan.jpg') }}" alt="Touchless QR Code Sharing" class="rounded-3">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 4 Panel: Audit Timeline -->
+        <div class="confluence-tab-panel" id="panel-timeline">
+            <div class="row g-4 align-items-center">
+                <div class="col-lg-5">
+                    <div class="tab-feature-card">
+                        <span class="atl-pill-badge primary mb-3">ACCOUNTABILITY & AUDITING</span>
+                        <h3 class="fw-bold text-dark mb-3">Stay in the know, your way.</h3>
+                        <p class="text-muted mb-0">
+                            Every event in your medical file cabinet—from user logins and PDF uploads to report views, downloads, and deletions—is timestamped and recorded in an immutable audit ledger.
+                        </p>
+
+                        <ul class="tab-checklist">
+                            <li><i class="bi bi-check2-circle"></i> <span>Chronological tracking of patient actions in UTC timestamps</span></li>
+                            <li><i class="bi bi-check2-circle"></i> <span>Transparency over who viewed or downloaded records</span></li>
+                            <li><i class="bi bi-check2-circle"></i> <span>Audit logs preserved across device sessions</span></li>
+                        </ul>
+
+                        <div>
+                            <a href="{{ url_for('main.login') }}" class="btn btn-atl-outline">
+                                View Your Activity History &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="tab-preview-board p-4 bg-white">
+                        <h6 class="fw-bold text-dark mb-3"><i class="bi bi-shield-check text-primary me-2"></i>Live Audit Log Stream Simulator</h6>
+                        <div class="atl-timeline">
+                            <div class="atl-timeline-item">
+                                <div class="atl-timeline-bullet bg-uploaded text-success"><i class="bi bi-cloud-arrow-up"></i></div>
+                                <div class="atl-timeline-content">
+                                    <span class="small fw-bold text-dark d-block">Uploaded: Blood_Chemistry_Panel_2026.pdf</span>
+                                    <span class="badge-cat badge-cat-lab mt-1">Classified as: Lab Report</span>
+                                    <div class="text-muted small mt-1"><i class="bi bi-clock me-1"></i>Today, 14:32:05 UTC</div>
+                                </div>
+                            </div>
+                            <div class="atl-timeline-item">
+                                <div class="atl-timeline-bullet bg-downloaded text-primary"><i class="bi bi-eye"></i></div>
+                                <div class="atl-timeline-content">
+                                    <span class="small fw-bold text-dark d-block">Viewed: Amoxicillin_Prescription.pdf</span>
+                                    <div class="text-muted small mt-1"><i class="bi bi-clock me-1"></i>Today, 11:15:20 UTC</div>
+                                </div>
+                            </div>
+                            <div class="atl-timeline-item">
+                                <div class="atl-timeline-bullet bg-login text-info"><i class="bi bi-key"></i></div>
+                                <div class="atl-timeline-content">
+                                    <span class="small fw-bold text-dark d-block">Patient Logged in successfully</span>
+                                    <div class="text-muted small mt-1"><i class="bi bi-clock me-1"></i>Today, 09:00:12 UTC</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 5 Panel: Clinic Collaboration -->
+        <div class="confluence-tab-panel" id="panel-collab">
+            <div class="row g-4 align-items-center">
+                <div class="col-lg-5">
+                    <div class="tab-feature-card">
+                        <span class="atl-pill-badge teal mb-3">MULTI-DEVICE HARMONY</span>
+                        <h3 class="fw-bold text-dark mb-3">Collaboration is at the core.</h3>
+                        <p class="text-muted mb-0">
+                            Whether at home on desktop, at the diagnostic center on an iPad, or in the emergency room on a smartphone, HealthDoc ML maintains perfect synchronization.
+                        </p>
+
+                        <ul class="tab-checklist">
+                            <li><i class="bi bi-check2-circle"></i> <span>Responsive viewport design optimized for modern touch screens</span></li>
+                            <li><i class="bi bi-check2-circle"></i> <span>Instant QR download for printed emergency wallet cards</span></li>
+                            <li><i class="bi bi-check2-circle"></i> <span>Zero third-party trackers or biometric telemetry leaks</span></li>
+                        </ul>
+
+                        <div>
+                            <a href="{{ url_for('main.register') }}" class="btn btn-atl-primary">
+                                Create Free Patient Account &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="tab-preview-board p-3 bg-white text-center">
+                        <img src="{{ url_for('static', filename='images/qr_mobile_scan.jpg') }}" alt="Collaboration Showcase" class="rounded-3">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==========================================================================
+     INTERACTIVE "SEE AI IN ACTION" PLAYGROUND SIMULATOR
+     ========================================================================== -->
+<section class="ai-playground-section" id="playground">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="atl-pill-badge indigo mb-2">INTERACTIVE SIMULATOR</span>
+            <h2 class="display-6 fw-extrabold text-dark mb-2">
+                Test the Machine Learning Classifier Live
+            </h2>
+            <p class="text-muted mx-auto" style="max-width: 620px;">
+                Select any clinical sample document below to witness real-time text parsing, TF-IDF vector extraction, and probabilistic classification.
+            </p>
+        </div>
+
+        <div class="playground-card">
+            <div class="row g-4">
+                <!-- Left: Sample Buttons -->
+                <div class="col-lg-5">
+                    <h6 class="fw-bold text-dark mb-3">
+                        <i class="bi bi-file-earmark-medical text-primary me-2"></i>Select Sample Medical Report:
+                    </h6>
+                    <div class="d-flex flex-column gap-2 mb-4">
+                        <button class="demo-sample-btn active" data-sample="lab">
+                            <span><i class="bi bi-file-earmark-medical text-primary me-2"></i>CBC Blood Chemistry Panel</span>
+                            <span class="badge bg-primary-light text-primary">Lab Report</span>
+                        </button>
+
+                        <button class="demo-sample-btn" data-sample="prescription">
+                            <span><i class="bi bi-capsule text-success me-2"></i>Amoxicillin 500mg Oral Order</span>
+                            <span class="badge bg-success-light text-success">Prescription</span>
+                        </button>
+
+                        <button class="demo-sample-btn" data-sample="scan">
+                            <span><i class="bi bi-activity text-warning me-2"></i>Chest CT Angiogram Procedure</span>
+                            <span class="badge bg-warning-light text-warning">Scan Report</span>
+                        </button>
+
+                        <button class="demo-sample-btn" data-sample="discharge">
+                            <span><i class="bi bi-clipboard2-pulse text-danger me-2"></i>Post-Op Cardiology Summary</span>
+                            <span class="badge bg-danger-light text-danger">Discharge Note</span>
+                        </button>
+                    </div>
+
+                    <div class="p-3 bg-light rounded-3 border">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="small fw-bold text-dark">Predicted Category:</span>
+                            <span id="playground-predicted-badge" class="badge-cat badge-cat-lab px-3 py-1.5 fs-6">
+                                <i class="bi bi-file-earmark-medical me-1"></i> Lab Report
+                            </span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center small text-muted mb-1">
+                            <span>Model Confidence:</span>
+                            <span id="playground-confidence-text" class="fw-bold text-primary">99.2% Confidence Match</span>
+                        </div>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" id="playground-confidence-fill" style="width: 99.2%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Interactive Terminal -->
+                <div class="col-lg-7">
+                    <div class="terminal-console shadow-sm" style="min-height: 280px;">
+                        <div class="d-flex justify-content-between align-items-center pb-2 mb-2 border-bottom border-secondary">
+                            <span class="text-white-50 small"><i class="bi bi-terminal me-1"></i> NLP Classification Engine Logs</span>
+                            <span class="badge bg-success small"><i class="bi bi-circle-fill me-1" style="font-size: 0.5rem;"></i>ONLINE</span>
+                        </div>
+                        <div id="playground-console-output">
+                            <div class="terminal-line text-muted small"><i class="bi bi-gear-fill me-1"></i> [1/3] Parsing document payload: <em>Comprehensive Metabolic & CBC Panel</em>...</div>
+                            <div class="terminal-line text-muted small"><i class="bi bi-cpu-fill me-1"></i> [2/3] Extracting TF-IDF n-grams: <code>Hemoglobin: 14.2 g/dL | WBC: 6.8 x10^3/uL</code></div>
+                            <div class="terminal-line text-success small fw-semibold"><i class="bi bi-check2-circle me-1"></i> [3/3] Logistic Regression Match Completed!</div>
+                            <div class="mt-3 p-2 bg-dark rounded border border-secondary">
+                                <span class="text-white fw-bold d-block mb-1">Snippet Analysis:</span>
+                                <div class="text-white-50" style="white-space: pre-line; font-size: 0.8rem;">HEMATOLOGY & CLINICAL BIOCHEMISTRY
+Specimen: Whole Blood EDTA
+Test: Complete Blood Count
+WBC Count: 6.8 K/uL (Normal 4.5 - 11.0)
+Platelets: 245 K/uL
+Glucose Fasting: 92 mg/dL (Normal < 100)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==========================================================================
+     ATLASSIAN FEATURES GRID
+     ========================================================================== -->
+<section class="container py-5 my-3" id="features">
     <div class="text-center mb-5">
-        <span class="text-success fw-bold text-uppercase tracking-wider">Features Grid</span>
-        <h2 class="fw-bold text-dark mt-1">Smart Healthcare Management</h2>
+        <span class="text-primary fw-bold text-uppercase tracking-wider small">ENTERPRISE CAPABILITIES</span>
+        <h2 class="display-6 fw-extrabold text-dark mt-1">Engineered for Clinical Precision</h2>
         <p class="text-muted mx-auto" style="max-width: 600px;">
-            A modern set of tools built specifically to streamline patient documents and enable secure sharing.
+            A complete suite of patient data management, text extraction, and privacy governance tools.
         </p>
     </div>
+
     <div class="row g-4">
         <!-- Feature 1 -->
         <div class="col-md-6 col-lg-4">
-            <div class="card card-custom card-hover h-100 p-4">
-                <div class="d-flex align-items-center mb-3">
-                    <div class="bg-primary-light text-primary rounded p-3 me-3">
-                        <i class="bi bi-hdd-network fs-4"></i>
-                    </div>
-                    <h5 class="fw-bold mb-0">Secure Storage</h5>
+            <div class="feature-box">
+                <div class="feature-icon-wrapper blue">
+                    <i class="bi bi-shield-lock-fill"></i>
                 </div>
-                <p class="text-muted mb-0 small">
-                    Encrypts and stores patient files in SQLite. Ensures patient-only authorization filters prevent unintended direct link discovery.
+                <h5 class="fw-bold mb-2">Encrypted Cloud Vault</h5>
+                <p class="text-muted small mb-0">
+                    Patient records are protected by password hashing and strict ownership authorization boundaries. Files can only be accessed by their authenticated owner.
                 </p>
             </div>
         </div>
+
         <!-- Feature 2 -->
         <div class="col-md-6 col-lg-4">
-            <div class="card card-custom card-hover h-100 p-4">
-                <div class="d-flex align-items-center mb-3">
-                    <div class="bg-primary-light text-primary rounded p-3 me-3">
-                        <i class="bi bi-cpu fs-4"></i>
-                    </div>
-                    <h5 class="fw-bold mb-0">AI Classification</h5>
+            <div class="feature-box">
+                <div class="feature-icon-wrapper indigo">
+                    <i class="bi bi-cpu-fill"></i>
                 </div>
-                <p class="text-muted mb-0 small">
-                    Uses Logistic Regression machine learning to parse PDF text and categorize documents automatically with zero human entry.
+                <h5 class="fw-bold mb-2">Scikit-Learn Classifier</h5>
+                <p class="text-muted small mb-0">
+                    Combines TF-IDF term frequency weighting with multiclass Logistic Regression algorithms, delivering rapid sub-second classification on report uploads.
                 </p>
             </div>
         </div>
+
         <!-- Feature 3 -->
         <div class="col-md-6 col-lg-4">
-            <div class="card card-custom card-hover h-100 p-4">
-                <div class="d-flex align-items-center mb-3">
-                    <div class="bg-primary-light text-primary rounded p-3 me-3">
-                        <i class="bi bi-qr-code-scan fs-4"></i>
-                    </div>
-                    <h5 class="fw-bold mb-0">QR Code Sharing</h5>
+            <div class="feature-box">
+                <div class="feature-icon-wrapper teal">
+                    <i class="bi bi-qr-code-scan"></i>
                 </div>
-                <p class="text-muted mb-0 small">
-                    Instantly generates unique QR codes pointing directly to document details. Allows quick, password-secured scanning at clinics.
+                <h5 class="fw-bold mb-2">Touchless QR Sharing</h5>
+                <p class="text-muted small mb-0">
+                    Dynamically generates QR codes bound to secure public access endpoints. Allows immediate hospital reception review on any iOS or Android browser.
                 </p>
             </div>
         </div>
+
         <!-- Feature 4 -->
         <div class="col-md-6 col-lg-4">
-            <div class="card card-custom card-hover h-100 p-4">
-                <div class="d-flex align-items-center mb-3">
-                    <div class="bg-primary-light text-primary rounded p-3 me-3">
-                        <i class="bi bi-clock-history fs-4"></i>
-                    </div>
-                    <h5 class="fw-bold mb-0">Access History</h5>
+            <div class="feature-box">
+                <div class="feature-icon-wrapper amber">
+                    <i class="bi bi-clock-history"></i>
                 </div>
-                <p class="text-muted mb-0 small">
-                    Logs and audits login, upload, view, download, and deletion activities to maintain complete transparency.
+                <h5 class="fw-bold mb-2">Immutable Audit Trail</h5>
+                <p class="text-muted small mb-0">
+                    Maintains an audit ledger of all logins, uploads, views, downloads, and deletions. Patients retain complete oversight over their personal health record timeline.
                 </p>
             </div>
         </div>
+
         <!-- Feature 5 -->
         <div class="col-md-6 col-lg-4">
-            <div class="card card-custom card-hover h-100 p-4">
-                <div class="d-flex align-items-center mb-3">
-                    <div class="bg-primary-light text-primary rounded p-3 me-3">
-                        <i class="bi bi-cloud-check fs-4"></i>
-                    </div>
-                    <h5 class="fw-bold mb-0">Cloud-Based Access</h5>
+            <div class="feature-box">
+                <div class="feature-icon-wrapper blue">
+                    <i class="bi bi-file-earmark-pdf-fill"></i>
                 </div>
-                <p class="text-muted mb-0 small">
-                    Responsive design ensures patients and clinical doctors can securely view health portfolios on desktop, tablet, or mobile.
+                <h5 class="fw-bold mb-2">PyPDF2 Text Extraction</h5>
+                <p class="text-muted small mb-0">
+                    Automatically scans and parses raw textual symbols from multi-page medical PDF files, feeding sanitised inputs directly into machine learning pipelines.
                 </p>
             </div>
         </div>
+
         <!-- Feature 6 -->
         <div class="col-md-6 col-lg-4">
-            <div class="card card-custom card-hover h-100 p-4">
-                <div class="d-flex align-items-center mb-3">
-                    <div class="bg-primary-light text-primary rounded p-3 me-3">
-                        <i class="bi bi-search fs-4"></i>
-                    </div>
-                    <h5 class="fw-bold mb-0">Fast Report Retrieval</h5>
+            <div class="feature-box">
+                <div class="feature-icon-wrapper red">
+                    <i class="bi bi-search"></i>
                 </div>
-                <p class="text-muted mb-0 small">
-                    Search and filter records by keyword filename, file categories, or upload dates instantly on the patient dashboard.
+                <h5 class="fw-bold mb-2">Instant Record Filtering</h5>
+                <p class="text-muted small mb-0">
+                    Real-time keyword filtering by filename, category pills, or calendar upload dates gives patients zero-latency retrieval over their entire history.
                 </p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Statistics Section -->
-<section class="bg-white border-top border-bottom py-5 mb-5">
+<!-- ==========================================================================
+     STATISTICS & METRICS COUNTER SECTION
+     ========================================================================== -->
+<section class="bg-white border-top border-bottom py-5 my-4">
     <div class="container">
         <div class="row g-4 text-center">
-            <!-- Counter 1 -->
+            <!-- Metric 1 -->
             <div class="col-6 col-lg-3">
-                <div class="landing-stat-card border-0 shadow-none">
-                    <div class="landing-stat-number" id="stat-reports" data-target="{{ 120 + total_reports }}">0</div>
-                    <div class="text-muted fw-semibold small text-uppercase">Reports Stored</div>
+                <div class="atl-stat-card border-0 shadow-none">
+                    <div class="atl-stat-number" id="stat-reports" data-target="{{ 120 + total_reports }}">0</div>
+                    <div class="text-muted fw-semibold small text-uppercase">Clinical Reports Stored</div>
                 </div>
             </div>
-            <!-- Counter 2 -->
+            <!-- Metric 2 -->
             <div class="col-6 col-lg-3">
-                <div class="landing-stat-card border-0 shadow-none">
-                    <div class="landing-stat-number" id="stat-users" data-target="{{ 45 + total_users }}">0</div>
-                    <div class="text-muted fw-semibold small text-uppercase">Total Users</div>
+                <div class="atl-stat-card border-0 shadow-none">
+                    <div class="atl-stat-number" id="stat-users" data-target="{{ 45 + total_users }}">0</div>
+                    <div class="text-muted fw-semibold small text-uppercase">Active Portal Patients</div>
                 </div>
             </div>
-            <!-- Counter 3 -->
+            <!-- Metric 3 -->
             <div class="col-6 col-lg-3">
-                <div class="landing-stat-card border-0 shadow-none">
-                    <div class="landing-stat-number" id="stat-accuracy" data-target="96">0</div>
-                    <div class="text-muted fw-semibold small text-uppercase">Classification Acc. (%)</div>
+                <div class="atl-stat-card border-0 shadow-none">
+                    <div class="atl-stat-number" id="stat-accuracy" data-target="96">0</div>
+                    <div class="text-muted fw-semibold small text-uppercase">Classification Accuracy (%)</div>
                 </div>
             </div>
-            <!-- Counter 4 -->
+            <!-- Metric 4 -->
             <div class="col-6 col-lg-3">
-                <div class="landing-stat-card border-0 shadow-none">
-                    <div class="landing-stat-number" id="stat-processed" data-target="{{ 512 + total_reports * 3 }}">0</div>
-                    <div class="text-muted fw-semibold small text-uppercase">Documents Processed</div>
+                <div class="atl-stat-card border-0 shadow-none">
+                    <div class="atl-stat-number" id="stat-processed" data-target="{{ 512 + total_reports * 3 }}">0</div>
+                    <div class="text-muted fw-semibold small text-uppercase">QR Access Requests</div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Benefits Section -->
-<section class="container mb-5 pb-4">
-    <div class="text-center mb-5">
-        <span class="text-primary fw-bold text-uppercase tracking-wider">Key Benefits</span>
-        <h2 class="fw-bold text-dark mt-1">Designed for Patients & Healthcare Providers</h2>
+<!-- ==========================================================================
+     FREQUENTLY ASKED QUESTIONS ACCORDION
+     ========================================================================== -->
+<section class="container py-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="text-center mb-5">
+                <span class="text-primary fw-bold text-uppercase tracking-wider small">GOT QUESTIONS?</span>
+                <h2 class="fw-bold text-dark mt-1">Frequently Asked Questions</h2>
+                <p class="text-muted">Everything you need to know about privacy, classification, and QR scanning.</p>
+            </div>
+
+            <div class="accordion atl-accordion shadow-sm" id="faqAccordion">
+                <div class="accordion-item border rounded-3 mb-3 overflow-hidden">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button fw-bold text-dark bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            How does the AI classify my medical PDFs?
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted small">
+                            HealthDoc ML uses a trained Scikit-Learn NLP model. When you upload a PDF, the system extracts text symbols with PyPDF2, computes TF-IDF word frequency weights, and passes them through a multiclass Logistic Regression model to assign the document to one of four categories: Prescription, Lab Report, Scan Report, or Discharge Summary.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item border rounded-3 mb-3 overflow-hidden">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed fw-bold text-dark bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Can other patients see my uploaded health records?
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted small">
+                            No. Every file is mapped strictly to your private user ID. The backend routes enforce rigorous session validation—attempting to access or delete documents belonging to another user ID results in an instant 403 authorization block.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item border rounded-3 mb-3 overflow-hidden">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed fw-bold text-dark bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            How does touchless QR sharing work at hospitals?
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted small">
+                            When you click into any document detail, you receive a dynamic QR code. Doctors can point their smartphone camera at the screen to immediately view the authorized PDF in their mobile browser without needing your login credentials.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="row g-4">
-        <!-- Benefit 1 -->
-        <div class="col-md-6 col-lg-3">
-            <div class="benefit-card">
-                <div class="benefit-icon-box">
-                    <i class="bi bi-layout-text-window-reverse"></i>
-                </div>
-                <h5 class="fw-bold mb-3">Easy Management</h5>
-                <p class="text-muted small mb-0">
-                    A clean dashboard helps you drag, drop, and view reports instantly, eliminating clutter and paper files.
-                </p>
-            </div>
-        </div>
-        <!-- Benefit 2 -->
-        <div class="col-md-6 col-lg-3">
-            <div class="benefit-card">
-                <div class="benefit-icon-box">
-                    <i class="bi bi-share"></i>
-                </div>
-                <h5 class="fw-bold mb-3">Secure Sharing</h5>
-                <p class="text-muted small mb-0">
-                    Share reports at the clinic using secure, dynamic QR codes, allowing doctors to view your specific reports directly.
-                </p>
-            </div>
-        </div>
-        <!-- Benefit 3 -->
-        <div class="col-md-6 col-lg-3">
-            <div class="benefit-card">
-                <div class="benefit-icon-box">
-                    <i class="bi bi-journal-medical"></i>
-                </div>
-                <h5 class="fw-bold mb-3">Organized Records</h5>
-                <p class="text-muted small mb-0">
-                    No more searching through folders. Categorize labs, prescriptions, scan reports, and discharge notes in one place.
-                </p>
-            </div>
-        </div>
-        <!-- Benefit 4 -->
-        <div class="col-md-6 col-lg-3">
-            <div class="benefit-card">
-                <div class="benefit-icon-box">
-                    <i class="bi bi-magic"></i>
-                </div>
-                <h5 class="fw-bold mb-3">AI-Assisted Categorization</h5>
-                <p class="text-muted small mb-0">
-                    State-of-the-art NLP models read the text in your PDF, automatically predicting the file type instantly.
-                </p>
-            </div>
+</section>
+
+<!-- ==========================================================================
+     HIGH CONVERTING BOTTOM BANNER (CONFLUENCE STYLE)
+     ========================================================================== -->
+<section class="container mb-5 pb-4">
+    <div class="rounded-4 p-5 text-center text-white position-relative overflow-hidden shadow-lg" style="background: linear-gradient(135deg, #0052cc 0%, #091e42 100%);">
+        <h2 class="display-6 fw-extrabold mb-3">Get your clinical records on HealthDoc ML today</h2>
+        <p class="lead opacity-90 mx-auto mb-4" style="max-width: 600px;">
+            Join modern patients and physicians organizing medical files with machine learning intelligence.
+        </p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{{ url_for('main.register') }}" class="btn btn-light text-primary fw-bold px-4 py-2.5">
+                Sign Up Now Free &rarr;
+            </a>
+            <a href="{{ url_for('main.login') }}" class="btn btn-outline-light fw-bold px-4 py-2.5">
+                Log In to Portal
+            </a>
         </div>
     </div>
 </section>
