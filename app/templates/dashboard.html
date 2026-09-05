@@ -1,306 +1,330 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<!-- Welcome Banner -->
-<div class="welcome-banner d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
-    <div>
-        <h2 class="fw-bold mb-1">Welcome back, {{ current_user.name }}!</h2>
-        <p class="mb-0 opacity-90">Manage your clinical reports, track classifications, and share records with secure QR codes.</p>
-    </div>
-    <div class="text-md-end">
-        <span class="badge bg-white text-dark p-2 px-3 fw-semibold shadow-sm" id="current-date-badge">
-            <i class="bi bi-clock me-1 text-primary"></i> Current Date: --
-        </span>
-    </div>
-</div>
-
-<!-- 5 Quick Statistics Cards -->
-<div class="row g-3 mb-4">
-    <!-- Stat 1: Total Documents -->
-    <div class="col-6 col-md-4 col-lg">
-        <div class="stat-card-custom stat-total h-100">
-            <div>
-                <span class="text-muted small fw-bold text-uppercase d-block mb-1">Total Files</span>
-                <h3 class="fw-bold mb-0 text-dark">{{ total_docs }}</h3>
+<div class="container py-4">
+    <!-- Atlassian Workspace Header -->
+    <div class="dashboard-header">
+        <div>
+            <div class="d-flex align-items-center gap-2 mb-1">
+                <span class="badge bg-primary-light text-primary fw-semibold px-2.5 py-1 small">WORKSPACE</span>
+                <span class="text-muted small">&bull; Patient Health Vault</span>
             </div>
-            <div class="stat-icon-wrapper">
-                <i class="bi bi-folder2-open"></i>
-            </div>
+            <h2 class="fw-bold text-dark mb-1">Welcome back, {{ current_user.name }}</h2>
+            <p class="text-muted small mb-0">Manage, classify, and share your diagnostic files and medical records.</p>
         </div>
-    </div>
-    <!-- Stat 2: Prescriptions -->
-    <div class="col-6 col-md-4 col-lg">
-        <div class="stat-card-custom stat-prescription h-100">
-            <div>
-                <span class="text-muted small fw-bold text-uppercase d-block mb-1">Prescriptions</span>
-                <h3 class="fw-bold mb-0 text-dark">{{ category_counts['Prescription'] }}</h3>
-            </div>
-            <div class="stat-icon-wrapper">
-                <i class="bi bi-capsule"></i>
-            </div>
-        </div>
-    </div>
-    <!-- Stat 3: Lab Reports -->
-    <div class="col-6 col-md-4 col-lg">
-        <div class="stat-card-custom stat-lab h-100">
-            <div>
-                <span class="text-muted small fw-bold text-uppercase d-block mb-1">Lab Reports</span>
-                <h3 class="fw-bold mb-0 text-dark">{{ category_counts['Lab Report'] }}</h3>
-            </div>
-            <div class="stat-icon-wrapper">
-                <i class="bi bi-file-earmark-medical"></i>
-            </div>
-        </div>
-    </div>
-    <!-- Stat 4: Scan Reports -->
-    <div class="col-6 col-md-6 col-lg">
-        <div class="stat-card-custom stat-scan h-100">
-            <div>
-                <span class="text-muted small fw-bold text-uppercase d-block mb-1">Scan Reports</span>
-                <h3 class="fw-bold mb-0 text-dark">{{ category_counts['Scan Report'] }}</h3>
-            </div>
-            <div class="stat-icon-wrapper">
-                <i class="bi bi-activity"></i>
-            </div>
-        </div>
-    </div>
-    <!-- Stat 5: Discharge Summaries -->
-    <div class="col-6 col-md-6 col-lg">
-        <div class="stat-card-custom stat-discharge h-100">
-            <div>
-                <span class="text-muted small fw-bold text-uppercase d-block mb-1">Discharge Notes</span>
-                <h3 class="fw-bold mb-0 text-dark">{{ category_counts['Discharge Summary'] }}</h3>
-            </div>
-            <div class="stat-icon-wrapper">
-                <i class="bi bi-clipboard2-pulse"></i>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Search & Filter Card -->
-<div class="card card-custom p-3 mb-4">
-    <div class="row g-3 align-items-center">
-        <div class="col-lg-4 col-md-6">
-            <label class="small fw-semibold text-muted mb-1"><i class="bi bi-search me-1"></i>Search File Name</label>
-            <input type="text" id="search-name" class="form-control filter-input" placeholder="Enter keywords...">
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <label class="small fw-semibold text-muted mb-1"><i class="bi bi-tag me-1"></i>Filter by Category</label>
-            <select id="filter-category" class="form-select filter-input">
-                <option value="">All Categories</option>
-                <option value="Prescription">Prescription</option>
-                <option value="Lab Report">Lab Report</option>
-                <option value="Scan Report">Scan Report</option>
-                <option value="Discharge Summary">Discharge Summary</option>
-            </select>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <label class="small fw-semibold text-muted mb-1"><i class="bi bi-calendar3 me-1"></i>Filter by Upload Date</label>
-            <input type="date" id="filter-date" class="form-control filter-input">
-        </div>
-        <div class="col-lg-2 col-md-6 d-flex align-items-end h-100" style="margin-top: auto;">
-            <button id="btn-reset-filters" class="btn btn-outline-primary w-100 py-2">
-                <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- Main Split Layout -->
-<div class="row g-4">
-    <!-- Left Column: Recent Documents List -->
-    <div class="col-lg-8">
-        <div class="card card-custom h-100">
-            <div class="card-header bg-white border-bottom py-3 d-flex align-items-center justify-content-between">
-                <h5 class="fw-bold mb-0 text-dark d-flex align-items-center">
-                    <i class="bi bi-files me-2 text-primary"></i>Uploaded Health Files
-                </h5>
-                <span class="badge bg-primary-light text-primary" id="table-record-count">Showing {{ documents|length }} records</span>
-            </div>
-            <div class="card-body p-0">
-                {% if documents %}
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0 text-dark" id="documents-table">
-                            <thead class="table-light text-muted">
-                                <tr>
-                                    <th class="ps-4 py-3" style="font-size: 0.85rem; font-weight: 700;">DOCUMENT TITLE</th>
-                                    <th class="py-3" style="font-size: 0.85rem; font-weight: 700;">CATEGORY</th>
-                                    <th class="py-3" style="font-size: 0.85rem; font-weight: 700;">UPLOAD DATE</th>
-                                    <th class="text-end pe-4 py-3" style="font-size: 0.85rem; font-weight: 700;">ACTIONS</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for doc in documents %}
-                                    <!-- Store dates as data attributes for easy JS filtering -->
-                                    <tr data-category="{{ doc.category }}" data-date="{{ doc.upload_date.strftime('%Y-%m-%d') }}">
-                                        <td class="ps-4 py-3">
-                                            <div class="d-flex align-items-center">
-                                                <div class="bg-light text-danger rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
-                                                    <i class="bi bi-file-pdf fs-5"></i>
-                                                </div>
-                                                <div class="text-truncate" style="max-width: 250px;">
-                                                    <span class="fw-bold text-dark text-break doc-filename" title="{{ doc.original_filename }}">{{ doc.original_filename }}</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="py-3">
-                                            {% if doc.category == 'Prescription' %}
-                                                <span class="badge badge-prescription px-2.5 py-1.5"><i class="bi bi-capsule me-1"></i>Prescription</span>
-                                            {% elif doc.category == 'Lab Report' %}
-                                                <span class="badge badge-lab px-2.5 py-1.5"><i class="bi bi-file-earmark-medical me-1"></i>Lab Report</span>
-                                            {% elif doc.category == 'Scan Report' %}
-                                                <span class="badge badge-scan px-2.5 py-1.5"><i class="bi bi-activity me-1"></i>Scan Report</span>
-                                            {% else %}
-                                                <span class="badge badge-discharge px-2.5 py-1.5"><i class="bi bi-clipboard2-pulse me-1"></i>Discharge Summary</span>
-                                            {% endif %}
-                                        </td>
-                                        <td class="py-3 text-muted small">
-                                            {{ doc.upload_date.strftime('%b %d, %Y') }}
-                                        </td>
-                                        <td class="text-end pe-4 py-3">
-                                            <div class="d-inline-flex gap-1">
-                                                <a href="{{ url_for('main.document_detail', doc_id=doc.id) }}" class="btn btn-sm btn-outline-primary" title="Details & QR">
-                                                    <i class="bi bi-info-circle"></i>
-                                                </a>
-                                                <a href="{{ url_for('main.download', doc_id=doc.id) }}" class="btn btn-sm btn-outline-success" title="Download">
-                                                    <i class="bi bi-download"></i>
-                                                </a>
-                                                <form action="{{ url_for('main.delete', doc_id=doc.id) }}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this file?');" style="display:inline;">
-                                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- Empty Table State (Hidden by default, shown by JS filter) -->
-                    <div id="no-search-results" class="text-center py-5 d-none">
-                        <i class="bi bi-search-heart fs-1 text-muted d-block mb-3"></i>
-                        <h6 class="text-secondary fw-semibold">No matching records found</h6>
-                        <p class="text-muted small mb-0">Try resetting or modifying your search filters above.</p>
-                    </div>
-                {% else %}
-                    <div class="text-center py-5">
-                        <i class="bi bi-folder-x fs-1 text-muted d-block mb-3"></i>
-                        <h5 class="text-secondary fw-semibold">No medical documents found</h5>
-                        <p class="text-muted mb-0">Use the upload panel on the right to add your first PDF document.</p>
-                    </div>
-                {% endif %}
-            </div>
+        <div class="d-flex align-items-center gap-3">
+            <span class="badge bg-light text-dark border p-2 px-3 fw-semibold shadow-sm" id="current-date-badge">
+                <i class="bi bi-calendar3 me-1 text-primary"></i> Current Date: --
+            </span>
+            <a href="#upload-dropzone" id="action-upload-scroll" class="btn btn-atl-primary btn-sm">
+                <i class="bi bi-cloud-upload me-1"></i> Upload File
+            </a>
         </div>
     </div>
 
-    <!-- Right Column: Interactive Widgets -->
-    <div class="col-lg-4">
-        <!-- Widget 1: Upload Panel -->
-        <div class="card card-custom mb-4">
-            <div class="card-header bg-white border-bottom py-3">
-                <h5 class="fw-bold mb-0 text-dark"><i class="bi bi-cloud-upload-fill me-2 text-secondary"></i>Upload PDF Report</h5>
-            </div>
-            <div class="card-body">
-                <form id="upload-form" action="{{ url_for('main.upload') }}" method="POST" enctype="multipart/form-data">
-                    <div class="upload-dropzone mb-3" id="upload-dropzone">
-                        <i class="bi bi-file-earmark-pdf-fill upload-icon d-block"></i>
-                        <span id="dropzone-text">
-                            <strong>Drag & drop PDF here</strong> or click to browse
-                        </span>
-                        <input type="file" name="file" id="document-file" accept=".pdf" required>
-                    </div>
-                    
-                    <!-- Progress Bar -->
-                    <div class="progress-container mb-3" id="progress-container">
-                        <div class="d-flex justify-content-between small text-muted mb-1">
-                            <span>Processing document...</span>
-                            <span id="progress-text">0%</span>
-                        </div>
-                        <div class="progress-bar-custom">
-                            <div class="progress-bar-fill" id="progress-bar-fill"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="alert alert-warning py-2 mb-3" style="font-size: 0.825rem;">
-                        <i class="bi bi-info-circle me-1"></i> File size limit: 10MB. Requires text-selectable PDFs.
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
-                        <i class="bi bi-cpu me-1"></i> Upload & Classify
-                    </button>
-                </form>
-            </div>
-        </div>
-
-        <!-- Widget 2: Quick Actions Panel -->
-        <div class="card card-custom mb-4">
-            <div class="card-header bg-white border-bottom py-3">
-                <h5 class="fw-bold mb-0 text-dark"><i class="bi bi-lightning-charge-fill me-2 text-primary"></i>Quick Actions</h5>
-            </div>
-            <div class="card-body">
-                <div class="row g-2">
-                    <div class="col-6">
-                        <a href="#" id="action-upload-scroll" class="quick-action-btn h-100">
-                            <i class="bi bi-cloud-arrow-up text-secondary"></i>
-                            <span>Upload Report</span>
-                        </a>
-                    </div>
-                    <div class="col-6">
-                        <a href="{{ url_for('main.history') }}" class="quick-action-btn h-100">
-                            <i class="bi bi-clock-history text-primary"></i>
-                            <span>View History</span>
-                        </a>
-                    </div>
-                    <div class="col-6">
-                        <a href="#" id="action-download-first" class="quick-action-btn h-100">
-                            <i class="bi bi-download text-success"></i>
-                            <span>Download PDF</span>
-                        </a>
-                    </div>
-                    <div class="col-6">
-                        <a href="#" id="action-qr-first" class="quick-action-btn h-100">
-                            <i class="bi bi-qr-code text-dark"></i>
-                            <span>View QR Code</span>
-                        </a>
-                    </div>
+    <!-- 5 Atlassian Metric Stat Cards -->
+    <div class="row g-3 mb-4">
+        <!-- Metric 1: Total Files -->
+        <div class="col-6 col-md-4 col-lg">
+            <div class="dashboard-stat-card stat-card-total">
+                <div>
+                    <span class="text-muted small fw-bold text-uppercase d-block mb-1">Total Files</span>
+                    <h3 class="fw-extrabold mb-0 text-dark">{{ total_docs }}</h3>
+                </div>
+                <div class="d-flex align-items-center justify-content-center bg-primary-light text-primary rounded-circle" style="width: 44px; height: 44px; font-size: 1.25rem;">
+                    <i class="bi bi-folder2-open"></i>
                 </div>
             </div>
         </div>
 
-        <!-- Widget 3: Recent Activity Timeline -->
-        <div class="card card-custom">
-            <div class="card-header bg-white border-bottom py-3">
-                <h5 class="fw-bold mb-0 text-dark"><i class="bi bi-calendar-event-fill me-2 text-primary"></i>Activity Timeline</h5>
+        <!-- Metric 2: Prescriptions -->
+        <div class="col-6 col-md-4 col-lg">
+            <div class="dashboard-stat-card stat-card-prescription">
+                <div>
+                    <span class="text-muted small fw-bold text-uppercase d-block mb-1">Prescriptions</span>
+                    <h3 class="fw-extrabold mb-0 text-dark">{{ category_counts['Prescription'] }}</h3>
+                </div>
+                <div class="d-flex align-items-center justify-content-center bg-teal-light text-success rounded-circle" style="width: 44px; height: 44px; font-size: 1.25rem;">
+                    <i class="bi bi-capsule"></i>
+                </div>
             </div>
-            <div class="card-body">
-                {% if activities %}
-                    <div class="timeline-container">
-                        {% for act in activities %}
-                            <div class="timeline-item">
-                                <!-- Dynamic timeline bullet based on type -->
-                                {% if "Uploaded" in act.activity %}
-                                    <div class="timeline-badge bg-uploaded"><i class="bi bi-file-earmark-arrow-up"></i></div>
-                                {% elif "Deleted" in act.activity %}
-                                    <div class="timeline-badge bg-deleted"><i class="bi bi-trash"></i></div>
-                                {% elif "Downloaded" in act.activity %}
-                                    <div class="timeline-badge bg-downloaded"><i class="bi bi-download"></i></div>
-                                {% elif "Viewed" in act.activity %}
-                                    <div class="timeline-badge bg-login"><i class="bi bi-eye"></i></div>
-                                {% else %}
-                                    <div class="timeline-badge"><i class="bi bi-check-circle"></i></div>
-                                {% endif %}
-                                <div class="timeline-content">
-                                    <span class="small fw-semibold text-dark">{{ act.activity }}</span>
-                                    <span class="timeline-time"><i class="bi bi-clock me-1"></i>{{ act.timestamp.strftime('%H:%M:%S - %b %d') }}</span>
-                                </div>
+        </div>
+
+        <!-- Metric 3: Lab Reports -->
+        <div class="col-6 col-md-4 col-lg">
+            <div class="dashboard-stat-card stat-card-lab">
+                <div>
+                    <span class="text-muted small fw-bold text-uppercase d-block mb-1">Lab Reports</span>
+                    <h3 class="fw-extrabold mb-0 text-dark">{{ category_counts['Lab Report'] }}</h3>
+                </div>
+                <div class="d-flex align-items-center justify-content-center bg-primary-light text-primary rounded-circle" style="width: 44px; height: 44px; font-size: 1.25rem;">
+                    <i class="bi bi-file-earmark-medical"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metric 4: Scan Reports -->
+        <div class="col-6 col-md-6 col-lg">
+            <div class="dashboard-stat-card stat-card-scan">
+                <div>
+                    <span class="text-muted small fw-bold text-uppercase d-block mb-1">Scan Reports</span>
+                    <h3 class="fw-extrabold mb-0 text-dark">{{ category_counts['Scan Report'] }}</h3>
+                </div>
+                <div class="d-flex align-items-center justify-content-center bg-warning-light text-warning rounded-circle" style="width: 44px; height: 44px; font-size: 1.25rem;">
+                    <i class="bi bi-activity"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metric 5: Discharge Summaries -->
+        <div class="col-6 col-md-6 col-lg">
+            <div class="dashboard-stat-card stat-card-discharge">
+                <div>
+                    <span class="text-muted small fw-bold text-uppercase d-block mb-1">Discharge Notes</span>
+                    <h3 class="fw-extrabold mb-0 text-dark">{{ category_counts['Discharge Summary'] }}</h3>
+                </div>
+                <div class="d-flex align-items-center justify-content-center bg-danger-light text-danger rounded-circle" style="width: 44px; height: 44px; font-size: 1.25rem;">
+                    <i class="bi bi-clipboard2-pulse"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search & Filter Card -->
+    <div class="atl-card p-3 mb-4">
+        <div class="row g-3 align-items-center">
+            <div class="col-lg-4 col-md-6">
+                <label class="small fw-semibold text-muted mb-1"><i class="bi bi-search me-1"></i>Search File Name</label>
+                <input type="text" id="search-name" class="form-control filter-input" placeholder="Search keywords in title...">
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <label class="small fw-semibold text-muted mb-1"><i class="bi bi-tag me-1"></i>Filter by Category</label>
+                <select id="filter-category" class="form-select filter-input">
+                    <option value="">All Categories</option>
+                    <option value="Prescription">Prescription</option>
+                    <option value="Lab Report">Lab Report</option>
+                    <option value="Scan Report">Scan Report</option>
+                    <option value="Discharge Summary">Discharge Summary</option>
+                </select>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <label class="small fw-semibold text-muted mb-1"><i class="bi bi-calendar3 me-1"></i>Filter by Upload Date</label>
+                <input type="date" id="filter-date" class="form-control filter-input">
+            </div>
+            <div class="col-lg-2 col-md-6 d-flex align-items-end h-100" style="margin-top: auto;">
+                <button id="btn-reset-filters" class="btn btn-atl-outline w-100 py-2">
+                    <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Workspace Split Layout -->
+    <div class="row g-4">
+        <!-- Left Column: Uploaded Documents Table -->
+        <div class="col-lg-8">
+            <div class="atl-card h-100">
+                <div class="card-header bg-white border-bottom py-3 d-flex align-items-center justify-content-between">
+                    <h5 class="fw-bold mb-0 text-dark d-flex align-items-center">
+                        <i class="bi bi-files me-2 text-primary"></i>Medical Records Ledger
+                    </h5>
+                    <span class="badge bg-primary-light text-primary" id="table-record-count">Showing {{ documents|length }} records</span>
+                </div>
+                <div class="card-body p-0">
+                    {% if documents %}
+                        <div class="table-responsive">
+                            <table class="table atl-table align-middle" id="documents-table">
+                                <thead>
+                                    <tr>
+                                        <th class="ps-4">Document Title</th>
+                                        <th>Category</th>
+                                        <th>Upload Date</th>
+                                        <th class="text-end pe-4">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for doc in documents %}
+                                        <tr data-category="{{ doc.category }}" data-date="{{ doc.upload_date.strftime('%Y-%m-%d') }}">
+                                            <td class="ps-4">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="bg-light text-danger rounded p-2 me-3 d-flex align-items-center justify-content-center border" style="width: 38px; height: 38px;">
+                                                        <i class="bi bi-file-earmark-pdf fs-5"></i>
+                                                    </div>
+                                                    <div class="text-truncate" style="max-width: 260px;">
+                                                        <span class="fw-bold text-dark text-break doc-filename" title="{{ doc.original_filename }}">{{ doc.original_filename }}</span>
+                                                        <span class="d-block text-muted small">PDF &bull; Verified Hash</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                {% if doc.category == 'Prescription' %}
+                                                    <span class="badge-cat badge-cat-prescription"><i class="bi bi-capsule"></i> Prescription</span>
+                                                {% elif doc.category == 'Lab Report' %}
+                                                    <span class="badge-cat badge-cat-lab"><i class="bi bi-file-earmark-medical"></i> Lab Report</span>
+                                                {% elif doc.category == 'Scan Report' %}
+                                                    <span class="badge-cat badge-cat-scan"><i class="bi bi-activity"></i> Scan Report</span>
+                                                {% else %}
+                                                    <span class="badge-cat badge-cat-discharge"><i class="bi bi-clipboard2-pulse"></i> Discharge Note</span>
+                                                {% endif %}
+                                            </td>
+                                            <td class="text-muted small">
+                                                <i class="bi bi-calendar-event me-1"></i>{{ doc.upload_date.strftime('%b %d, %Y') }}
+                                            </td>
+                                            <td class="text-end pe-4">
+                                                <div class="d-inline-flex gap-1">
+                                                    <a href="{{ url_for('main.document_detail', doc_id=doc.id) }}" class="btn btn-sm btn-atl-outline py-1 px-2.5" title="Details & QR">
+                                                        <i class="bi bi-qr-code text-primary"></i>
+                                                    </a>
+                                                    <a href="{{ url_for('main.download', doc_id=doc.id) }}" class="btn btn-sm btn-atl-outline py-1 px-2.5" title="Download">
+                                                        <i class="bi bi-download text-success"></i>
+                                                    </a>
+                                                    <form action="{{ url_for('main.delete', doc_id=doc.id) }}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this file?');" style="display:inline;">
+                                                        <button type="submit" class="btn btn-sm btn-atl-outline py-1 px-2.5" title="Delete">
+                                                            <i class="bi bi-trash text-danger"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Empty Search Filter State -->
+                        <div id="no-search-results" class="text-center py-5 d-none">
+                            <i class="bi bi-search-heart fs-1 text-muted d-block mb-3"></i>
+                            <h6 class="text-dark fw-bold">No matching records found</h6>
+                            <p class="text-muted small mb-0">Try resetting or modifying your search filter terms above.</p>
+                        </div>
+                    {% else %}
+                        <!-- Empty Document State -->
+                        <div class="text-center py-5">
+                            <div class="d-inline-flex align-items-center justify-content-center bg-light rounded-circle p-3 mb-3 border text-muted" style="width: 64px; height: 64px;">
+                                <i class="bi bi-folder-plus fs-3"></i>
                             </div>
-                        {% endfor %}
+                            <h5 class="text-dark fw-bold mb-1">No medical files uploaded yet</h5>
+                            <p class="text-muted small mb-3">Upload your first clinical PDF on the right to start AI classification.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Interactive Widgets -->
+        <div class="col-lg-4">
+            <!-- Upload Panel -->
+            <div class="atl-card mb-4">
+                <div class="card-header bg-white border-bottom py-3">
+                    <h6 class="fw-bold mb-0 text-dark d-flex align-items-center">
+                        <i class="bi bi-cloud-arrow-up-fill me-2 text-primary"></i>Ingest Medical PDF
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <form id="upload-form" action="{{ url_for('main.upload') }}" method="POST" enctype="multipart/form-data">
+                        <div class="atl-dropzone mb-3" id="upload-dropzone">
+                            <i class="bi bi-cloud-arrow-up dropzone-icon d-block"></i>
+                            <div id="dropzone-text">
+                                <strong class="text-dark d-block mb-1">Drag & drop clinical PDF here</strong>
+                                <span class="text-muted small">or click to browse local files</span>
+                            </div>
+                            <input type="file" name="file" id="document-file" accept=".pdf" required>
+                        </div>
+
+                        <!-- Progress Bar -->
+                        <div class="progress-container mb-3" id="progress-container">
+                            <div class="d-flex justify-content-between small text-muted mb-1">
+                                <span>Classifying report with NLP...</span>
+                                <span id="progress-text" class="fw-bold text-primary">0%</span>
+                            </div>
+                            <div class="progress-bar-custom">
+                                <div class="progress-bar-fill" id="progress-bar-fill"></div>
+                            </div>
+                        </div>
+
+                        <div class="p-2.5 bg-light rounded-3 border mb-3 small text-muted">
+                            <i class="bi bi-shield-check text-success me-1"></i> Text-selectable PDFs up to 10MB accepted. Automatic duplicate hashing applied.
+                        </div>
+
+                        <button type="submit" class="btn btn-atl-primary w-100 py-2.5">
+                            <i class="bi bi-cpu me-1"></i> Upload & Classify with AI
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Quick Actions Panel -->
+            <div class="atl-card mb-4">
+                <div class="card-header bg-white border-bottom py-3">
+                    <h6 class="fw-bold mb-0 text-dark d-flex align-items-center">
+                        <i class="bi bi-lightning-charge-fill me-2 text-warning"></i>Quick Actions
+                    </h6>
+                </div>
+                <div class="card-body p-3">
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <a href="#" id="action-upload-scroll" class="quick-action-btn h-100">
+                                <i class="bi bi-cloud-arrow-up text-primary"></i>
+                                <span>Upload File</span>
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a href="{{ url_for('main.history') }}" class="quick-action-btn h-100">
+                                <i class="bi bi-clock-history text-indigo"></i>
+                                <span>Audit Logs</span>
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a href="#" id="action-download-first" class="quick-action-btn h-100">
+                                <i class="bi bi-download text-success"></i>
+                                <span>Download PDF</span>
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a href="#" id="action-qr-first" class="quick-action-btn h-100">
+                                <i class="bi bi-qr-code text-dark"></i>
+                                <span>View QR Code</span>
+                            </a>
+                        </div>
                     </div>
-                {% else %}
-                    <p class="text-muted text-center py-3 mb-0 small">No activities logged yet.</p>
-                {% endif %}
+                </div>
+            </div>
+
+            <!-- Activity Audit Timeline -->
+            <div class="atl-card">
+                <div class="card-header bg-white border-bottom py-3 d-flex align-items-center justify-content-between">
+                    <h6 class="fw-bold mb-0 text-dark d-flex align-items-center">
+                        <i class="bi bi-clock-history me-2 text-primary"></i>Activity Timeline
+                    </h6>
+                    <a href="{{ url_for('main.history') }}" class="small text-primary fw-semibold">View All</a>
+                </div>
+                <div class="card-body">
+                    {% if activities %}
+                        <div class="atl-timeline">
+                            {% for act in activities %}
+                                <div class="atl-timeline-item">
+                                    {% if "Uploaded" in act.activity %}
+                                        <div class="atl-timeline-bullet bg-uploaded text-success"><i class="bi bi-cloud-arrow-up"></i></div>
+                                    {% elif "Deleted" in act.activity %}
+                                        <div class="atl-timeline-bullet bg-deleted text-danger"><i class="bi bi-trash"></i></div>
+                                    {% elif "Downloaded" in act.activity %}
+                                        <div class="atl-timeline-bullet bg-downloaded text-primary"><i class="bi bi-download"></i></div>
+                                    {% elif "Viewed" in act.activity %}
+                                        <div class="atl-timeline-bullet bg-login text-info"><i class="bi bi-eye"></i></div>
+                                    {% else %}
+                                        <div class="atl-timeline-bullet text-dark"><i class="bi bi-check2"></i></div>
+                                    {% endif %}
+                                    <div class="atl-timeline-content">
+                                        <span class="small fw-semibold text-dark d-block">{{ act.activity }}</span>
+                                        <span class="text-muted small mt-1 d-block"><i class="bi bi-clock me-1"></i>{{ act.timestamp.strftime('%H:%M:%S - %b %d') }}</span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center py-3 mb-0 small">No patient activities recorded yet.</p>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>

@@ -1,109 +1,151 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="row mb-4">
-    <div class="col-12">
+<div class="container py-4">
+    <!-- Confluence Breadcrumb Header -->
+    <div class="mb-4">
         <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ url_for('main.dashboard') }}" class="text-decoration-none fw-semibold"><i class="bi bi-arrow-left me-1"></i>Back to Dashboard</a></li>
+            <ol class="breadcrumb mb-1">
+                <li class="breadcrumb-item"><a href="{{ url_for('main.dashboard') }}" class="text-decoration-none fw-semibold"><i class="bi bi-arrow-left me-1"></i>Workspace Dashboard</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Document Record</li>
             </ol>
         </nav>
-    </div>
-</div>
-
-<div class="row g-4">
-    <!-- Left Column: Document Info & QR Code -->
-    <div class="col-md-5">
-        <div class="card card-custom mb-4">
-            <div class="card-header bg-white border-bottom py-3">
-                <h5 class="fw-bold mb-0 text-dark d-flex align-items-center">
-                    <i class="bi bi-info-circle-fill me-2 text-primary"></i>Document Info
-                </h5>
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div>
+                <h2 class="fw-bold text-dark mb-0">{{ document.original_filename }}</h2>
+                <span class="text-muted small">Uploaded on {{ document.upload_date.strftime('%B %d, %Y at %H:%M UTC') }}</span>
             </div>
-            <div class="card-body">
-                <ul class="list-group list-group-flush mb-4">
-                    <li class="list-group-item d-flex justify-content-between align-items-center py-3 bg-transparent">
-                        <span class="text-muted"><i class="bi bi-file-earmark-pdf me-2 text-danger"></i>File Name</span>
-                        <strong class="text-dark text-break text-end ms-2" style="max-width: 65%;">{{ document.original_filename }}</strong>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center py-3 bg-transparent">
-                        <span class="text-muted"><i class="bi bi-tags me-2 text-primary"></i>Predicted Category</span>
-                        {% if document.category == 'Prescription' %}
-                            <span class="badge badge-prescription px-3 py-2"><i class="bi bi-capsule me-1"></i>Prescription</span>
-                        {% elif document.category == 'Lab Report' %}
-                            <span class="badge badge-lab px-3 py-2"><i class="bi bi-file-earmark-medical me-1"></i>Lab Report</span>
-                        {% elif document.category == 'Scan Report' %}
-                            <span class="badge badge-scan px-3 py-2"><i class="bi bi-activity me-1"></i>Scan Report</span>
-                        {% else %}
-                            <span class="badge badge-discharge px-3 py-2"><i class="bi bi-clipboard2-pulse me-1"></i>Discharge Summary</span>
-                        {% endif %}
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center py-3 bg-transparent">
-                        <span class="text-muted"><i class="bi bi-calendar-check me-2 text-primary"></i>Upload Date</span>
-                        <strong class="text-dark">{{ document.upload_date.strftime('%B %d, %Y - %H:%M') }}</strong>
-                    </li>
-                </ul>
-
-                <!-- QR Code Box -->
-                <div class="text-center bg-light p-4 rounded-3 border mb-4">
-                    <h6 class="fw-bold text-dark mb-2 d-flex align-items-center justify-content-center">
-                        <i class="bi bi-qr-code-scan me-2 text-primary"></i>Document QR Code
-                    </h6>
-                    <p class="text-muted small mb-3">Scan this code with a mobile device to access this record page directly.</p>
-                    <div class="qr-box mb-3">
-                        <img src="{{ url_for('static', filename=document.qr_path) }}" alt="QR Code" class="img-fluid" style="max-width: 170px;">
-                    </div>
-                    <div class="bg-white border rounded p-2 text-truncate">
-                        <code class="text-dark small select-all" id="detail-qr-url">{{ url_for('main.share', doc_id=document.id, _external=True) }}</code>
-                    </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="row g-2">
-                    <div class="col-6">
-                        <a href="{{ url_for('main.download', doc_id=document.id) }}" class="btn btn-success text-white w-100 py-2.5 fw-semibold d-flex align-items-center justify-content-center">
-                            <i class="bi bi-download me-2"></i> Download PDF
-                        </a>
-                    </div>
-                    <div class="col-6">
-                        <form action="{{ url_for('main.delete', doc_id=document.id) }}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this document? This action cannot be undone.');">
-                            <button type="submit" class="btn btn-outline-danger w-100 py-2.5 fw-semibold d-flex align-items-center justify-content-center">
-                                <i class="bi bi-trash me-2"></i> Delete File
-                            </button>
-                        </form>
-                    </div>
-                </div>
+            <div>
+                {% if document.category == 'Prescription' %}
+                    <span class="badge-cat badge-cat-prescription fs-6 px-3 py-1.5"><i class="bi bi-capsule"></i> Prescription</span>
+                {% elif document.category == 'Lab Report' %}
+                    <span class="badge-cat badge-cat-lab fs-6 px-3 py-1.5"><i class="bi bi-file-earmark-medical"></i> Lab Report</span>
+                {% elif document.category == 'Scan Report' %}
+                    <span class="badge-cat badge-cat-scan fs-6 px-3 py-1.5"><i class="bi bi-activity"></i> Scan Report</span>
+                {% else %}
+                    <span class="badge-cat badge-cat-discharge fs-6 px-3 py-1.5"><i class="bi bi-clipboard2-pulse"></i> Discharge Note</span>
+                {% endif %}
             </div>
         </div>
     </div>
 
-    <!-- Right Column: ML Process Analysis & Extracted text -->
-    <div class="col-md-7">
-        <div class="card card-custom h-100">
-            <div class="card-header bg-white border-bottom py-3">
-                <h5 class="fw-bold mb-0 text-dark d-flex align-items-center">
-                    <i class="bi bi-cpu-fill me-2 text-primary"></i>NLP Classification Pipeline
-                </h5>
-            </div>
-            <div class="card-body">
-                <h6 class="fw-bold text-dark mb-2">Automated Categorization Process:</h6>
-                <ol class="text-muted small ps-3 mb-4">
-                    <li class="mb-1"><strong>Text Extraction</strong>: We extract textual symbols from the uploaded PDF document structure.</li>
-                    <li class="mb-1"><strong>Vector Representation</strong>: Text is converted to a weighted numerical representation using TF-IDF (Term Frequency-Inverse Document Frequency) calculations.</li>
-                    <li class="mb-1"><strong>Logistic Regression Classifier</strong>: A machine learning model calculates classification probabilities, assigning the highest probability class as the file type.</li>
-                </ol>
+    <div class="row g-4">
+        <!-- Left Column: Document Info & QR Sharing Code -->
+        <div class="col-lg-5">
+            <div class="atl-card mb-4">
+                <div class="card-header bg-white border-bottom py-3">
+                    <h5 class="fw-bold mb-0 text-dark d-flex align-items-center">
+                        <i class="bi bi-qr-code-scan me-2 text-primary"></i>Touchless QR Verification
+                    </h5>
+                </div>
+                <div class="card-body text-center p-4">
+                    <p class="text-muted small mb-3">
+                        Scan with any smartphone or hospital tablet to securely view this medical report without logging into your account.
+                    </p>
 
-                <h6 class="fw-bold text-dark d-flex align-items-center mb-2">
-                    <i class="bi bi-file-earmark-text-fill me-2 text-secondary"></i>Parsed Text Snippet (First 800 Characters)
-                </h6>
-                {% if text_snippet %}
-                    <pre class="text-snippet-box text-break mb-0">{{ text_snippet }}</pre>
-                {% else %}
-                    <div class="alert alert-info py-2 mb-0" style="font-size: 0.9rem;">
-                        <i class="bi bi-info-circle me-1"></i> No textual information was extracted from this PDF. (Scanned images or binary files might return empty text content).
+                    <!-- QR Code Box -->
+                    <div class="p-3 bg-white border rounded-3 d-inline-block shadow-sm mb-3">
+                        <img src="{{ url_for('static', filename=document.qr_path) }}" alt="Document QR Code" class="img-fluid" style="max-width: 180px;">
                     </div>
-                {% endif %}
+
+                    <!-- Direct URL Box -->
+                    <div class="p-2.5 bg-light border rounded-3 mb-3 text-start">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="small fw-bold text-muted">Public Share Endpoint:</span>
+                            <button type="button" class="btn btn-sm btn-link p-0 text-primary text-decoration-none small" onclick="navigator.clipboard.writeText('{{ url_for('main.share', doc_id=document.id, _external=True) }}'); alert('Share link copied to clipboard!');">
+                                <i class="bi bi-clipboard me-1"></i> Copy Link
+                            </button>
+                        </div>
+                        <code class="text-dark small text-break d-block">{{ url_for('main.share', doc_id=document.id, _external=True) }}</code>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <a href="{{ url_for('main.download', doc_id=document.id) }}" class="btn btn-atl-success w-100 py-2.5">
+                                <i class="bi bi-download me-1"></i> Download PDF
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <form action="{{ url_for('main.delete', doc_id=document.id) }}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this document? This action cannot be undone.');">
+                                <button type="submit" class="btn btn-atl-outline w-100 py-2.5 text-danger">
+                                    <i class="bi bi-trash me-1"></i> Delete File
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Metadata Summary Card -->
+            <div class="atl-card p-3">
+                <h6 class="fw-bold text-dark mb-3"><i class="bi bi-info-circle text-primary me-2"></i>File Metadata</h6>
+                <ul class="list-unstyled small mb-0">
+                    <li class="d-flex justify-content-between py-2 border-bottom">
+                        <span class="text-muted">Storage Format:</span>
+                        <strong class="text-dark">Portable Document Format (PDF)</strong>
+                    </li>
+                    <li class="d-flex justify-content-between py-2 border-bottom">
+                        <span class="text-muted">Classification Model:</span>
+                        <strong class="text-dark">TF-IDF + Logistic Regression</strong>
+                    </li>
+                    <li class="d-flex justify-content-between py-2">
+                        <span class="text-muted">Security Policy:</span>
+                        <strong class="text-success"><i class="bi bi-shield-check me-1"></i>Owner Authorization Only</strong>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Right Column: NLP Pipeline Inspector -->
+        <div class="col-lg-7">
+            <div class="atl-card h-100">
+                <div class="card-header bg-white border-bottom py-3">
+                    <h5 class="fw-bold mb-0 text-dark d-flex align-items-center">
+                        <i class="bi bi-cpu-fill me-2 text-primary"></i>NLP Classification Pipeline Analysis
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="p-3 bg-light rounded-3 border mb-4">
+                        <h6 class="fw-bold text-dark mb-2">Automated Multi-Stage Ingestion:</h6>
+                        <div class="row g-2 text-center small mt-2">
+                            <div class="col-md-4">
+                                <div class="bg-white p-2.5 rounded border">
+                                    <i class="bi bi-file-earmark-text text-primary fs-4 d-block mb-1"></i>
+                                    <strong>1. Extraction</strong>
+                                    <span class="text-muted d-block small">PyPDF2 Text Parsing</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="bg-white p-2.5 rounded border">
+                                    <i class="bi bi-bar-chart-steps text-indigo fs-4 d-block mb-1"></i>
+                                    <strong>2. Vectorization</strong>
+                                    <span class="text-muted d-block small">TF-IDF Feature Weights</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="bg-white p-2.5 rounded border">
+                                    <i class="bi bi-check-circle text-success fs-4 d-block mb-1"></i>
+                                    <strong>3. Prediction</strong>
+                                    <span class="text-muted d-block small">Logistic Regression</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h6 class="fw-bold text-dark d-flex align-items-center mb-2">
+                        <i class="bi bi-terminal-fill me-2 text-secondary"></i>Extracted Clinical Text Snippet (First 800 Characters)
+                    </h6>
+                    {% if text_snippet %}
+                        <div class="terminal-console p-3" style="max-height: 350px;">
+                            <pre class="text-white mb-0" style="white-space: pre-wrap; font-family: ui-monospace, monospace; font-size: 0.85rem;">{{ text_snippet }}</pre>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info py-3 mb-0 small">
+                            <i class="bi bi-info-circle me-1"></i> No textual characters were extracted from this PDF. (Scanned image-only PDFs require OCR or contain non-searchable vector glyphs).
+                        </div>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
