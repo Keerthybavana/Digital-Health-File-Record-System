@@ -290,42 +290,6 @@
                 </div>
             </div>
 
-            <!-- Activity Audit Timeline -->
-            <div class="atl-card">
-                <div class="card-header bg-white border-bottom py-3 d-flex align-items-center justify-content-between">
-                    <h6 class="fw-bold mb-0 text-dark d-flex align-items-center">
-                        <i class="bi bi-clock-history me-2 text-primary"></i>Activity Timeline
-                    </h6>
-                    <a href="{{ url_for('main.history') }}" class="small text-primary fw-semibold">View All</a>
-                </div>
-                <div class="card-body">
-                    {% if activities %}
-                        <div class="atl-timeline">
-                            {% for act in activities %}
-                                <div class="atl-timeline-item">
-                                    {% if "Uploaded" in act.activity %}
-                                        <div class="atl-timeline-bullet bg-uploaded text-success"><i class="bi bi-cloud-arrow-up"></i></div>
-                                    {% elif "Deleted" in act.activity %}
-                                        <div class="atl-timeline-bullet bg-deleted text-danger"><i class="bi bi-trash"></i></div>
-                                    {% elif "Downloaded" in act.activity %}
-                                        <div class="atl-timeline-bullet bg-downloaded text-primary"><i class="bi bi-download"></i></div>
-                                    {% elif "Viewed" in act.activity %}
-                                        <div class="atl-timeline-bullet bg-login text-info"><i class="bi bi-eye"></i></div>
-                                    {% else %}
-                                        <div class="atl-timeline-bullet text-dark"><i class="bi bi-check2"></i></div>
-                                    {% endif %}
-                                    <div class="atl-timeline-content">
-                                        <span class="small fw-semibold text-dark d-block">{{ act.activity }}</span>
-                                        <span class="text-muted small mt-1 d-block"><i class="bi bi-clock me-1"></i>{{ act.timestamp.strftime('%H:%M:%S - %b %d') }}</span>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        <p class="text-muted text-center py-3 mb-0 small">No patient activities recorded yet.</p>
-                    {% endif %}
-                </div>
-            </div>
         </div>
     </div>
 </div>

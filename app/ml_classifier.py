@@ -67,7 +67,7 @@ class DocumentClassifier:
                 if page_text:
                     text += page_text + "\n"
         except Exception as e:
-            print(f"Error extracting text from {pdf_path}: {e}")
+            print(f"Error extracting text from {pdf_path}: {repr(e)}")
         return text.strip()
 
     def classify_text(self, text):
@@ -95,7 +95,7 @@ class DocumentClassifier:
             prediction = self.classifier.predict(vec_text)[0]
             return prediction
         except Exception as e:
-            print(f"Prediction error: {e}")
+            print(f"Prediction error: {repr(e)}")
             return "Discharge Summary"  # Fallback
 
     def classify_pdf(self, pdf_path):

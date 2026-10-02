@@ -63,7 +63,7 @@
                     </div>
                     
                     <div class="hero-image-wrapper">
-                        <img src="{{ url_for('static', filename='images/confluence_hero_showcase.jpg') }}" alt="HealthDoc ML Workspace Interface" class="img-fluid">
+                        <img src="{{ url_for('static', filename='images/health_records_dashboard.svg') }}" alt="Health records dashboard with recent documents and privacy status" class="img-fluid">
                         
                         <!-- Floating Pill Badges -->
                         <div class="floating-hero-pill top-right">
@@ -167,7 +167,7 @@
                             </div>
                             <span class="badge bg-light text-muted border">Live Sync Active</span>
                         </div>
-                        <img src="{{ url_for('static', filename='images/confluence_hero_showcase.jpg') }}" alt="Smart Records Preview" class="rounded-3 shadow-sm">
+                        <img src="{{ url_for('static', filename='images/health_records_dashboard.svg') }}" alt="Health records dashboard preview" class="rounded-3 shadow-sm">
                     </div>
                 </div>
             </div>
@@ -509,43 +509,7 @@ Glucose Fasting: 92 mg/dL (Normal < 100)</div>
     </div>
 </section>
 
-<!-- ==========================================================================
-     STATISTICS & METRICS COUNTER SECTION
-     ========================================================================== -->
-<section class="bg-white border-top border-bottom py-5 my-4">
-    <div class="container">
-        <div class="row g-4 text-center">
-            <!-- Metric 1 -->
-            <div class="col-6 col-lg-3">
-                <div class="atl-stat-card border-0 shadow-none">
-                    <div class="atl-stat-number" id="stat-reports" data-target="{{ 120 + total_reports }}">0</div>
-                    <div class="text-muted fw-semibold small text-uppercase">Clinical Reports Stored</div>
-                </div>
-            </div>
-            <!-- Metric 2 -->
-            <div class="col-6 col-lg-3">
-                <div class="atl-stat-card border-0 shadow-none">
-                    <div class="atl-stat-number" id="stat-users" data-target="{{ 45 + total_users }}">0</div>
-                    <div class="text-muted fw-semibold small text-uppercase">Active Portal Patients</div>
-                </div>
-            </div>
-            <!-- Metric 3 -->
-            <div class="col-6 col-lg-3">
-                <div class="atl-stat-card border-0 shadow-none">
-                    <div class="atl-stat-number" id="stat-accuracy" data-target="96">0</div>
-                    <div class="text-muted fw-semibold small text-uppercase">Classification Accuracy (%)</div>
-                </div>
-            </div>
-            <!-- Metric 4 -->
-            <div class="col-6 col-lg-3">
-                <div class="atl-stat-card border-0 shadow-none">
-                    <div class="atl-stat-number" id="stat-processed" data-target="{{ 512 + total_reports * 3 }}">0</div>
-                    <div class="text-muted fw-semibold small text-uppercase">QR Access Requests</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+
 
 <!-- ==========================================================================
      FREQUENTLY ASKED QUESTIONS ACCORDION

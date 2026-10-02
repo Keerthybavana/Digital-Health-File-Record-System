@@ -1,0 +1,17 @@
+﻿__pycache__/
+*.py[cod]
+
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+instance/
+
+digital_health.db
+digital_health.db-*
+uploads/*
+!uploads/.gitkeep
+app/static/qrcodes/*.png
+last_error.txt
+digital_health_backup.db

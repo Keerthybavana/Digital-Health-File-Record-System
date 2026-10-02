@@ -1,12 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="row justify-content-center align-items-center" style="min-height: 70vh;">
-        <div class="col-md-6 col-lg-5">
-            <div class="atl-card p-4 p-md-5 shadow-sm">
+<section class="auth-layout">
+    <div class="row g-0 align-items-stretch">
+        <div class="col-lg-6 auth-visual">
+            <img src="{{ url_for('static', filename='images/auth-healthcare.png') }}" alt="Healthcare records and medical care" class="auth-visual-image">
+        </div>
+        <div class="col-lg-6 auth-form-side d-flex align-items-center justify-content-center p-4 p-lg-5">
+            <div class="atl-card auth-form-card p-4 p-md-5 shadow-sm">
                 <div class="text-center mb-4">
-                    <div class="d-inline-flex align-items-center justify-content-center atl-brand-icon mb-3" style="width: 52px; height: 52px; font-size: 1.6rem; background: linear-gradient(135deg, #00875a 0%, #0052cc 100%);">
+                    <div class="d-inline-flex align-items-center justify-content-center atl-brand-icon mb-3" style="width: 52px; height: 52px; font-size: 1.6rem;">
                         <i class="bi bi-person-plus-fill"></i>
                     </div>
                     <h3 class="fw-bold text-dark mb-1">Create Patient Account</h3>
@@ -57,5 +60,5 @@
             </div>
         </div>
     </div>
-</div>
+</section>
 {% endblock %}
