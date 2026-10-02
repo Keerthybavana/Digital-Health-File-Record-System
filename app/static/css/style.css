@@ -102,7 +102,7 @@ a:hover {
    TOP ANNOUNCEMENT BAR
    ========================================================================== */
 .atl-top-announcement {
-    background: linear-gradient(90deg, #091e42 0%, #172b4d 50%, #0052cc 100%);
+    background: linear-gradient(90deg, #103a43 0%, #087e79 52%, #0052cc 100%);
     color: #ffffff;
     padding: 0.5rem 1rem;
     font-size: 0.815rem;
@@ -156,18 +156,18 @@ a:hover {
     width: 36px;
     height: 36px;
     border-radius: 8px;
-    background: linear-gradient(135deg, var(--atl-primary) 0%, var(--atl-indigo) 100%);
+    background: linear-gradient(135deg, var(--atl-teal) 0%, var(--atl-primary) 100%);
     color: #ffffff;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     font-size: 1.15rem;
-    box-shadow: 0 2px 6px rgba(0, 82, 204, 0.35);
+    box-shadow: 0 2px 6px rgba(0, 135, 90, 0.3);
 }
 
 .atl-brand-badge {
-    background: var(--atl-indigo-light);
-    color: var(--atl-indigo);
+    background: var(--atl-teal-light);
+    color: var(--atl-teal);
     font-size: 0.68rem;
     font-weight: 700;
     padding: 0.15rem 0.45rem;
@@ -307,6 +307,47 @@ a:hover {
     transform: translateY(-3px);
     box-shadow: var(--elevation-3);
     border-color: #c1c7d0;
+}
+
+.auth-layout {
+    min-height: 72vh;
+    background: #ffffff;
+}
+
+.auth-visual {
+    position: relative;
+    min-height: 72vh;
+    overflow: hidden;
+    background: #d9eef8;
+}
+
+.auth-visual-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: left center;
+}
+
+.auth-form-side {
+    background: #f7fbfd;
+}
+
+.auth-form-card {
+    width: 100%;
+    max-width: 500px;
+}
+
+@media (max-width: 991.98px) {
+    .auth-layout {
+        min-height: 0;
+    }
+
+    .auth-visual {
+        min-height: 280px;
+        max-height: 38vh;
+    }
 }
 
 .atl-pill-badge {

@@ -156,7 +156,7 @@ def upload():
         print(f"\n--- [DEBUG] PDF UPLOAD TEXT EXTRACTION ---")
         print(f"Original File: {original_filename}")
         print(f"Extracted Length: {len(extracted_text)} characters")
-        print(f"First 200 Chars:\n{extracted_text[:200]}")
+        print(f"First 200 Chars:\n{repr(extracted_text[:200])}")
         print(f"-----------------------------------------\n")
         
         category = classifier.classify_text(extracted_text)
@@ -210,6 +210,10 @@ def upload():
         
         flash(f'Document "{original_filename}" uploaded and classified as {category}!', 'success')
     except Exception as e:
+        import traceback
+        with open(os.path.join(current_app.config['UPLOAD_FOLDER'], "last_error.txt"), "w") as f:
+            f.write(traceback.format_exc())
+
         db.session.rollback()
         # Clean up files if failed
         if os.path.exists(file_path):
