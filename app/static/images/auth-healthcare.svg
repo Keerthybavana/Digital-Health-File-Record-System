@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1152" height="768" viewBox="0 0 1152 768" fill="none">
+  <defs>
+    <linearGradient id="room" x1="0" y1="0" x2="820" y2="720" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#B9DFEF"/>
+      <stop offset=".48" stop-color="#DDF0F4"/>
+      <stop offset="1" stop-color="#F7FBFA"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="90" y1="0" x2="410" y2="500" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5E9DBA" stop-opacity=".8"/>
+      <stop offset="1" stop-color="#D6F0F4" stop-opacity=".28"/>
+    </linearGradient>
+    <linearGradient id="desk" x1="80" y1="625" x2="740" y2="760" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#C78C62"/>
+      <stop offset="1" stop-color="#F0C7A1"/>
+    </linearGradient>
+    <linearGradient id="shield" x1="285" y1="320" x2="505" y2="520" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#DDF5F5"/>
+    </linearGradient>
+    <filter id="softShadow" x="180" y="295" width="430" height="330" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="16"/>
+    </filter>
+  </defs>
+
+  <rect width="1152" height="768" fill="url(#room)"/>
+  <path d="M0 0H490V590H0Z" fill="url(#glass)"/>
+  <path d="M150 0V584M326 0V584M0 196H490M0 390H490" stroke="#F4FCFC" stroke-opacity=".76" stroke-width="12"/>
+  <path d="M507 0C399 118 405 224 457 344C513 472 505 584 378 681H1152V0H507Z" fill="#F8FCFC" fill-opacity=".94"/>
+  <path d="M0 638C194 615 349 658 516 635C706 609 905 642 1152 589V768H0V638Z" fill="url(#desk)"/>
+  <path d="M0 654C186 634 360 680 533 654C759 620 959 654 1152 613" stroke="#FFF1E4" stroke-opacity=".84" stroke-width="5"/>
+
+  <g opacity=".93">
+    <path d="M34 449C60 372 69 307 56 237M57 355C26 327 16 293 24 260C55 275 71 307 57 355ZM55 316C82 286 91 255 78 223C50 243 41 276 55 316ZM49 414C19 394 7 365 13 335C42 347 59 376 49 414Z" fill="#5B9E69"/>
+    <path d="M18 444H88L80 580H28L18 444Z" fill="#D4E4E0"/>
+    <path d="M24 451H82" stroke="#FFFFFF" stroke-opacity=".8" stroke-width="7"/>
+  </g>
+
+  <text x="112" y="105" fill="#FFFFFF" font-family="Georgia, serif" font-size="47" font-style="italic">Better Health</text>
+  <text x="145" y="160" fill="#FFFFFF" font-family="Georgia, serif" font-size="42" font-style="italic">Brighter Tomorrow</text>
+  <path d="M239 180C302 146 362 143 435 151" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+  <text x="150" y="222" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="17" font-weight="600">Your Health Records</text>
+  <text x="150" y="247" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="15">Safe  ·  Simple  ·  Always</text>
+
+  <ellipse cx="356" cy="486" rx="154" ry="94" fill="#48B7D5" fill-opacity=".25" filter="url(#softShadow)"/>
+  <g stroke="#B9ECF5" stroke-width="3" stroke-linecap="round">
+    <path d="M350 348V300M288 381L238 347M422 380L475 346M277 454H225M433 455H489M316 520L281 560M403 520L440 557"/>
+    <path d="M238 347H204M475 346H510M225 454H193M489 455H525"/>
+  </g>
+
+  <g fill="#FFFFFF" fill-opacity=".91" stroke="#BFEAF3" stroke-width="2">
+    <rect x="306" y="272" width="90" height="62" rx="13"/>
+    <rect x="172" y="319" width="72" height="66" rx="12"/>
+    <rect x="476" y="316" width="72" height="66" rx="12"/>
+    <rect x="157" y="425" width="72" height="64" rx="12"/>
+    <rect x="489" y="424" width="72" height="64" rx="12"/>
+    <rect x="244" y="536" width="72" height="64" rx="12"/>
+    <rect x="410" y="534" width="72" height="64" rx="12"/>
+  </g>
+  <g stroke="#3B9BB9" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M329 303L344 319L371 286M321 286H351"/>
+    <path d="M188 338H224M188 350H217M188 362H211M188 374H220M198 331V380"/>
+    <path d="M498 334V355C498 367 506 374 516 374C526 374 534 367 534 355V334M498 334H505M527 334H534M516 374V381"/>
+    <path d="M175 458H211M193 448V478M183 468L193 478L203 468"/>
+    <path d="M505 445H544V474H505Z M514 439V445M535 439V445M516 459H533"/>
+    <path d="M280 553C267 553 265 571 280 571C295 571 293 553 280 553ZM263 588C265 575 295 575 297 588"/>
+    <path d="M434 551H458L452 565L464 581H428L440 565L434 551ZM438 559H454M443 572H449"/>
+  </g>
+
+  <path d="M350 364C332 347 302 355 291 378C272 420 298 469 350 508C402 469 428 420 409 378C398 355 368 347 350 364Z" fill="url(#shield)" stroke="#FFFFFF" stroke-width="6"/>
+  <path d="M301 424H328L338 408L350 444L362 398L373 425H399" stroke="#40A9C5" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M993 85H1024V116H1055V147H1024V178H993V147H962V116H993V85Z" fill="#9AD9EF" fill-opacity=".52"/>
+  <path d="M1051 590H1073V612H1095V634H1073V656H1051V634H1029V612H1051V590Z" fill="#9AD9EF" fill-opacity=".42"/>
+</svg>

@@ -193,38 +193,133 @@ document.addEventListener('DOMContentLoaded', function() {
     const progressContainer = document.getElementById('progress-container');
     const progressBarFill = document.getElementById('progress-bar-fill');
     const progressText = document.getElementById('progress-text');
+    const progressLabel = document.getElementById('progress-label');
+    const uploadError = document.getElementById('upload-error');
 
-    if (uploadForm && progressContainer && fileInput) {
+    if (uploadForm && progressContainer && fileInput && progressBarFill && progressText) {
         uploadForm.addEventListener('submit', function(e) {
             if (fileInput.files.length === 0) return;
 
             e.preventDefault();
 
+            const selectedFile = fileInput.files[0];
+            const maximumSize = 25 * 1024 * 1024;
+            if (selectedFile.size > maximumSize) {
+                if (uploadError) {
+                    uploadError.textContent = 'PDF files must be 25 MB or smaller.';
+                    uploadError.hidden = false;
+                }
+                return;
+            }
+
+            if (uploadError) {
+                uploadError.textContent = '';
+                uploadError.hidden = true;
+            }
+
             const submitBtn = uploadForm.querySelector('button[type="submit"]');
             if (submitBtn) {
                 submitBtn.disabled = true;
-                submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Analyzing Clinical Content...`;
+                submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Uploading PDF...`;
             }
 
             progressContainer.style.display = 'block';
+            progressBarFill.style.width = '0%';
+            progressText.textContent = '0%';
 
-            let width = 0;
-            const duration = 1200;
-            const step = 40;
-            const intervalTime = duration / (100 / step);
+            const request = new XMLHttpRequest();
+            request.open('POST', uploadForm.action);
+            request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            request.setRequestHeader('Accept', 'application/json');
 
-            const timer = setInterval(function() {
-                width += step;
-                if (width >= 100) {
+            request.upload.addEventListener('progress', function(event) {
+                if (!event.lengthComputable) return;
+
+                const percent = Math.min(95, Math.round((event.loaded / event.total) * 95));
+                progressBarFill.style.width = percent + '%';
+                progressText.textContent = percent + '%';
+            });
+            request.upload.addEventListener('load', function() {
+                if (progressLabel) progressLabel.textContent = 'Upload complete. Classifying PDF...';
+                if (submitBtn) submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Classifying PDF...`;
+            });
+            request.addEventListener('load', function() {
+                let payload = null;
+                const contentType = request.getResponseHeader('Content-Type') || '';
+                if (contentType.includes('application/json')) {
+                    try {
+                        payload = JSON.parse(request.responseText);
+                    } catch (error) {
+                        payload = null;
+                    }
+                }
+
+                // Explicit JSON success
+                if (payload && payload.status === 'success' && payload.redirect) {
                     progressBarFill.style.width = '100%';
                     progressText.textContent = '100%';
-                    clearInterval(timer);
-                    uploadForm.submit();
-                } else {
-                    progressBarFill.style.width = width + '%';
-                    progressText.textContent = width + '%';
+                    if (progressLabel) progressLabel.textContent = 'Classification complete!';
+                    window.location.assign(payload.redirect);
+                    return;
                 }
-            }, intervalTime);
+
+                // Explicit JSON error (e.g. 400, 413, 500, or unauthorized 401)
+                if (payload && payload.status === 'error' && payload.message) {
+                    if (request.status === 401 && payload.redirect) {
+                        showUploadFailure(payload.message);
+                        setTimeout(function() {
+                            window.location.assign(payload.redirect);
+                        }, 2000);
+                        return;
+                    }
+                    showUploadFailure(payload.message);
+                    return;
+                }
+
+                // Check for redirect to login or unexpected HTML navigation
+                const responseUrl = request.responseURL || '';
+                if (responseUrl.includes('/login')) {
+                    showUploadFailure('Your session has expired. Please log in again.');
+                    setTimeout(function() {
+                        window.location.assign(responseUrl);
+                    }, 2000);
+                    return;
+                }
+
+                // Unexpected success HTML response (fallback)
+                if (request.status >= 200 && request.status < 400 && responseUrl) {
+                    window.location.assign(responseUrl);
+                    return;
+                }
+
+                // Catch-all failure
+                showUploadFailure();
+            });
+            request.addEventListener('error', function() {
+                showUploadFailure('A network error occurred or the server connection was lost. Please check your connection and try again.');
+            });
+            request.addEventListener('abort', function() {
+                showUploadFailure('The upload was cancelled. Please try again.');
+            });
+            request.send(new FormData(uploadForm));
+
+            function showUploadFailure(message = 'The upload could not be completed. Please try again.') {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="bi bi-cpu me-1"></i> Upload & Classify with AI';
+                }
+                if (uploadError) {
+                    uploadError.textContent = message;
+                    uploadError.hidden = false;
+                }
+                if (progressLabel) progressLabel.textContent = 'Upload failed';
+                if (progressBarFill) {
+                    progressBarFill.style.width = '0%';
+                }
+                if (progressText) {
+                    progressText.textContent = '0%';
+                }
+            }
         });
     }
 

@@ -234,16 +234,17 @@
                         <!-- Progress Bar -->
                         <div class="progress-container mb-3" id="progress-container">
                             <div class="d-flex justify-content-between small text-muted mb-1">
-                                <span>Classifying report with NLP...</span>
+                                <span id="progress-label">Uploading PDF...</span>
                                 <span id="progress-text" class="fw-bold text-primary">0%</span>
                             </div>
                             <div class="progress-bar-custom">
                                 <div class="progress-bar-fill" id="progress-bar-fill"></div>
                             </div>
                         </div>
+                        <div id="upload-error" class="alert alert-danger py-2 small" role="alert" hidden></div>
 
                         <div class="p-2.5 bg-light rounded-3 border mb-3 small text-muted">
-                            <i class="bi bi-shield-check text-success me-1"></i> Text-selectable PDFs up to 10MB accepted. Automatic duplicate hashing applied.
+                            <i class="bi bi-shield-check text-success me-1"></i> PDF files up to 25 MB accepted. Scanned PDFs may not contain extractable text for classification.
                         </div>
 
                         <button type="submit" class="btn btn-atl-primary w-100 py-2.5">

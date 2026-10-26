@@ -1,6 +1,7 @@
 import os
-from flask import Flask
-from flask_login import LoginManager
+from flask import Flask, flash, redirect, url_for, request, jsonify
+from flask_login import LoginManager, current_user
+from werkzeug.exceptions import RequestEntityTooLarge
 from app.models import db, User
 
 login_manager = LoginManager()
@@ -23,6 +24,8 @@ def create_app():
     app.config['SECRET_KEY'] = 'dev-health-secret-key-12345'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(base_dir, 'digital_health.db')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['MAX_UPLOAD_SIZE'] = 25 * 1024 * 1024
+    app.config['MAX_CONTENT_LENGTH'] = app.config['MAX_UPLOAD_SIZE'] + 1024 * 1024
     app.config['UPLOAD_FOLDER'] = upload_folder
     app.config['MODELS_FOLDER'] = models_folder
     app.config['QRCODES_FOLDER'] = qrcodes_folder
@@ -32,6 +35,36 @@ def create_app():
     login_manager.init_app(app)
     login_manager.login_view = 'main.login'
     login_manager.login_message_category = 'info'
+
+    @login_manager.unauthorized_handler
+    def handle_unauthorized():
+        is_ajax = (
+            request.headers.get('X-Requested-With') == 'XMLHttpRequest' or
+            request.accept_mimetypes.best == 'application/json' or
+            'application/json' in request.headers.get('Accept', '')
+        )
+        if is_ajax:
+            return jsonify({
+                'status': 'error',
+                'message': 'Your session has expired or you are not logged in. Please log in again.',
+                'redirect': url_for('main.login')
+            }), 401
+        flash('Please log in to access this page.', 'info')
+        return redirect(url_for('main.login'))
+
+    @app.errorhandler(RequestEntityTooLarge)
+    def handle_request_too_large(_error):
+        message = 'PDF files must be 25 MB or smaller.'
+        is_ajax = (
+            request.headers.get('X-Requested-With') == 'XMLHttpRequest' or
+            request.accept_mimetypes.best == 'application/json' or
+            'application/json' in request.headers.get('Accept', '')
+        )
+        if is_ajax:
+            return jsonify({'status': 'error', 'message': message}), 413
+        flash(message, 'danger')
+        endpoint = 'main.dashboard' if current_user.is_authenticated else 'main.login'
+        return redirect(url_for(endpoint))
     
     # Register blueprints
     from app.routes import main_bp
@@ -40,6 +73,13 @@ def create_app():
     # Create tables
     with app.app_context():
         db.create_all()
+
+        # Pre-load ML models at application startup to avoid on-demand import delays
+        try:
+            from app.routes import classifier
+            classifier.load_models()
+        except Exception as e:
+            app.logger.warning("Classifier preloading warning: %s", e)
         
         # Automatically update/regenerate all QR codes using the local network IP on startup
         try:

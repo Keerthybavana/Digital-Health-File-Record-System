@@ -1,11 +1,12 @@
 import os
 import uuid
 from datetime import datetime
-from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app, send_from_directory
+from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app, send_from_directory, jsonify
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 import qrcode
+import PyPDF2
 
 from app.models import db, User, Document, Activity
 from app.ml_classifier import DocumentClassifier
@@ -129,50 +130,82 @@ def dashboard():
 @main_bp.route('/upload', methods=['POST'])
 @login_required
 def upload():
+    is_ajax = (
+        request.headers.get('X-Requested-With') == 'XMLHttpRequest' or
+        request.accept_mimetypes.best == 'application/json' or
+        'application/json' in request.headers.get('Accept', '')
+    )
+
+    def respond(message, status='error', redirect_to=None, status_code=200):
+        if is_ajax:
+            payload = {'status': status, 'message': message}
+            if redirect_to:
+                payload['redirect'] = redirect_to
+            return jsonify(payload), status_code
+
+        if status == 'error':
+            flash(message, 'danger')
+        else:
+            flash(message, 'success')
+
+        return redirect(redirect_to or url_for('main.dashboard'))
+
     if 'file' not in request.files:
-        flash('No file part in the request.', 'danger')
-        return redirect(url_for('main.dashboard'))
+        return respond('No file part in the request.', status_code=400)
         
     file = request.files['file']
     if file.filename == '':
-        flash('No file selected.', 'danger')
-        return redirect(url_for('main.dashboard'))
-        
+        return respond('No file selected.', status_code=400)
+
     if not file.filename.lower().endswith('.pdf'):
-        flash('Only PDF documents are allowed.', 'danger')
-        return redirect(url_for('main.dashboard'))
+        return respond('Only PDF documents are allowed.', status_code=400)
+
+    file.stream.seek(0, os.SEEK_END)
+    file_size = file.stream.tell()
+    file.stream.seek(0)
+    if file_size > current_app.config['MAX_UPLOAD_SIZE']:
+        return respond('PDF files must be 25 MB or smaller.', status_code=400)
         
-    original_filename = secure_filename(file.filename)
+    original_filename = secure_filename(file.filename) or f"document_{uuid.uuid4().hex[:8]}.pdf"
     # Generate unique filename to store on disk
     unique_filename = f"{uuid.uuid4().hex}_{original_filename}"
     file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], unique_filename)
+    qr_file_path = None
     
     try:
         # Save file to uploads folder
         file.save(file_path)
+
+        # Validate PDF integrity before classification
+        try:
+            reader = PyPDF2.PdfReader(file_path)
+            if reader.is_encrypted:
+                if os.path.exists(file_path):
+                    os.remove(file_path)
+                return respond('The PDF file is encrypted and cannot be processed.', status_code=400)
+            # Ensure PDF structure has readable pages
+            _ = len(reader.pages)
+        except Exception as pdf_err:
+            if os.path.exists(file_path):
+                os.remove(file_path)
+            current_app.logger.warning("Corrupted or invalid PDF uploaded: %s (%s)", original_filename, pdf_err)
+            return respond('The uploaded file is corrupted or is not a valid PDF.', status_code=400)
         
         # Run ML Classification
         extracted_text = classifier.extract_text_from_pdf(file_path)
-        print(f"\n--- [DEBUG] PDF UPLOAD TEXT EXTRACTION ---")
-        print(f"Original File: {original_filename}")
-        print(f"Extracted Length: {len(extracted_text)} characters")
-        print(f"First 200 Chars:\n{repr(extracted_text[:200])}")
-        print(f"-----------------------------------------\n")
-        
         category = classifier.classify_text(extracted_text)
         
-        # Create database entry first to get the unique document ID
+        # Create database entry first to get the unique document ID via flush (not committed yet)
         new_doc = Document(
             user_id=current_user.id,
             filename=unique_filename,
             original_filename=original_filename,
             category=category,
-            qr_path=''  # To be generated below
+            qr_path=''  # To be assigned below
         )
         db.session.add(new_doc)
-        db.session.commit()
+        db.session.flush()
         
-        # Generate QR Code pointing to details page
         # Generate QR Code pointing directly to the file via public share route
         details_url = url_for('main.share', doc_id=new_doc.id, _external=True)
         
@@ -203,24 +236,48 @@ def upload():
         
         # Update QR path in DB
         new_doc.qr_path = f"qrcodes/{qr_filename}"
+        
+        # Log activity within the same transaction
+        activity = Activity(
+            user_id=current_user.id,
+            activity=f"Uploaded document: {original_filename} (Classified as: {category})",
+            timestamp=datetime.now()
+        )
+        db.session.add(activity)
+
+        # Atomically commit document, QR path, and activity together
         db.session.commit()
-        
-        # Log activity
-        log_activity(current_user.id, f"Uploaded document: {original_filename} (Classified as: {category})")
-        
-        flash(f'Document "{original_filename}" uploaded and classified as {category}!', 'success')
+
+        success_message = f'Document "{original_filename}" uploaded and classified as {category}!'
+
+        if is_ajax:
+            return jsonify({'status': 'success', 'message': success_message, 'redirect': url_for('main.dashboard')})
+
+        flash(success_message, 'success')
+        return redirect(url_for('main.dashboard'))
     except Exception as e:
         import traceback
-        with open(os.path.join(current_app.config['UPLOAD_FOLDER'], "last_error.txt"), "w") as f:
-            f.write(traceback.format_exc())
+        error_details = traceback.format_exc()
+        current_app.logger.error("Upload failure for file %s: %s", original_filename, error_details)
+        try:
+            with open(os.path.join(current_app.config['UPLOAD_FOLDER'], 'last_error.txt'), 'w', encoding='utf-8') as f:
+                f.write(error_details)
+        except Exception as log_err:
+            current_app.logger.warning("Could not write last_error.txt: %s", log_err)
 
         db.session.rollback()
-        # Clean up files if failed
         if os.path.exists(file_path):
-            os.remove(file_path)
-        flash(f'An error occurred during upload/classification: {e}', 'danger')
-        
-    return redirect(url_for('main.dashboard'))
+            try:
+                os.remove(file_path)
+            except OSError:
+                pass
+        if qr_file_path and os.path.exists(qr_file_path):
+            try:
+                os.remove(qr_file_path)
+            except OSError:
+                pass
+
+        return respond('An error occurred during upload or classification. Please try again.', status='error', status_code=500)
 
 @main_bp.route('/document/<int:doc_id>')
 @login_required
