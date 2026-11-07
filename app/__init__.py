@@ -21,7 +21,18 @@ def create_app():
     os.makedirs(models_folder, exist_ok=True)
     os.makedirs(qrcodes_folder, exist_ok=True)
     
-    app.config['SECRET_KEY'] = 'dev-health-secret-key-12345'
+    is_production = (
+        os.environ.get('FLASK_ENV', '').strip().lower() == 'production' or
+        os.environ.get('ENV', '').strip().lower() == 'production' or
+        os.environ.get('ENVIRONMENT', '').strip().lower() == 'production'
+    )
+    secret_key = os.environ.get('SECRET_KEY')
+    if not secret_key:
+        if is_production:
+            raise RuntimeError("SECRET_KEY environment variable is required in production.")
+        secret_key = 'dev-health-secret-key-fallback'
+
+    app.config['SECRET_KEY'] = secret_key
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(base_dir, 'digital_health.db')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['MAX_UPLOAD_SIZE'] = 25 * 1024 * 1024
